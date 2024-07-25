@@ -329,7 +329,7 @@ class NavigationPanel(QFrame):
         self._insertWidgetToLayout(index, separator, position)
 
     def _registerWidget(self, routeKey: str, parentRouteKey: str, widget: NavigationWidget, onClick, tooltip: str):
-        """ register widget """
+        """ registeration widget """
         widget.clicked.connect(self._onWidgetClicked)
 
         if onClick is not None:

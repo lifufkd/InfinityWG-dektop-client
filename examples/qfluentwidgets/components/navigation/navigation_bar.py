@@ -315,7 +315,7 @@ class NavigationBar(QWidget):
         self._insertWidgetToLayout(index, widget, position)
 
     def _registerWidget(self, routeKey: str, widget: NavigationWidget, onClick):
-        """ register widget """
+        """ registeration widget """
         widget.clicked.connect(self._onWidgetClicked)
 
         if onClick is not None:

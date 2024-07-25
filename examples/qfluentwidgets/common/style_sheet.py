@@ -18,7 +18,7 @@ class StyleSheetManager(QObject):
         self.widgets = weakref.WeakKeyDictionary()
 
     def register(self, source, widget: QWidget, reset=True):
-        """ register widget to manager
+        """ registeration widget to manager
 
         Parameters
         ----------
@@ -303,7 +303,7 @@ def setStyleSheet(widget: QWidget, source: Union[str, StyleSheetBase], theme=The
         the theme of style sheet
 
     register: bool
-        whether to register the widget to the style manager. If `register=True`, the style of
+        whether to registeration the widget to the style manager. If `registeration=True`, the style of
         the widget will be updated automatically when the theme changes
     """
     if register:
@@ -346,7 +346,7 @@ def addStyleSheet(widget: QWidget, source: Union[str, StyleSheetBase], theme=The
         the theme of style sheet
 
     register: bool
-        whether to register the widget to the style manager. If `register=True`, the style of
+        whether to registeration the widget to the style manager. If `registeration=True`, the style of
         the widget will be updated automatically when the theme changes
     """
     if register:

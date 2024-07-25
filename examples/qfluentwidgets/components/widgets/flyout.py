@@ -361,7 +361,7 @@ class FlyoutAnimationManager(QObject):
 
     @classmethod
     def register(cls, name):
-        """ register menu animation manager
+        """ registeration menu animation manager
 
         Parameters
         ----------
