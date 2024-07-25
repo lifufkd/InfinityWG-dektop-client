@@ -27,7 +27,8 @@ class LoginWindow(Window, Ui_Login):
         self.setupUi(self)
         setTheme(Theme.AUTO)
 
-        self._registration_page = RegistrationWindow(self)
+        self._startup = True
+        self._registration_page = None
         self.setTitleBar(SplitTitleBar(self))
         self.titleBar.raise_()
         self.LoginImage.setScaledContents(False)
@@ -46,6 +47,9 @@ class LoginWindow(Window, Ui_Login):
         self.RegistrationpushButton.clicked.connect(self.open_registration_page)
 
     def open_registration_page(self):
+        if self._startup:
+            self._registration_page = RegistrationWindow(self)
+            self._startup = False
         self._registration_page.show()
         self.hide()
 
