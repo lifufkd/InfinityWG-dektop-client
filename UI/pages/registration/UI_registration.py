@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'registerWBxrmo.ui'
+## Form generated from reading UI file 'registerKdodkR.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -15,12 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QSizePolicy, QSpacerItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
+    QLineEdit, QSizePolicy, QSpacerItem, QVBoxLayout,
+    QWidget)
 
-from qfluentwidgets import (BodyLabel, HyperlinkButton, LineEdit, ToolButton,
-    TransparentToolButton)
+from qfluentwidgets import (BodyLabel, LineEdit, PrimaryPushButton, PushButton,
+    ToolButton, TransparentToolButton)
 import resources.UI_resources
 
 class Ui_Registration(object):
@@ -29,8 +29,8 @@ class Ui_Registration(object):
             Registration.setObjectName(u"Registration")
         Registration.resize(1235, 839)
         Registration.setMinimumSize(QSize(700, 500))
-        self.gridLayout = QGridLayout(Registration)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.horizontalLayout = QHBoxLayout(Registration)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.widget = QWidget(Registration)
         self.widget.setObjectName(u"widget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
@@ -44,12 +44,14 @@ class Ui_Registration(object):
 "	font: 13px 'Microsoft YaHei'\n"
 "}")
         self.verticalLayout = QVBoxLayout(self.widget)
+        self.verticalLayout.setSpacing(10)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.pinButton = TransparentToolButton(self.widget)
-        self.pinButton.setObjectName(u"pinButton")
-        self.pinButton.setIconSize(QSize(25, 25))
+        self.verticalLayout.setContentsMargins(-1, 25, -1, 25)
+        self.LoginPushButton = TransparentToolButton(self.widget)
+        self.LoginPushButton.setObjectName(u"LoginPushButton")
+        self.LoginPushButton.setIconSize(QSize(25, 25))
 
-        self.verticalLayout.addWidget(self.pinButton)
+        self.verticalLayout.addWidget(self.LoginPushButton)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -139,7 +141,7 @@ class Ui_Registration(object):
 
         self.verticalLayout.addItem(self.verticalSpacer_4)
 
-        self.RegisterpushButton = HyperlinkButton(self.widget)
+        self.RegisterpushButton = PrimaryPushButton(self.widget)
         self.RegisterpushButton.setObjectName(u"RegisterpushButton")
         font = QFont()
         font.setFamilies([u"HoloLens MDL2 Assets"])
@@ -153,7 +155,7 @@ class Ui_Registration(object):
         self.verticalLayout.addItem(self.verticalSpacer_2)
 
 
-        self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.widget)
 
         self.LoginImage = QLabel(Registration)
         self.LoginImage.setObjectName(u"LoginImage")
@@ -162,7 +164,7 @@ class Ui_Registration(object):
         self.LoginImage.setScaledContents(True)
         self.LoginImage.setMargin(25)
 
-        self.gridLayout.addWidget(self.LoginImage, 0, 1, 1, 1)
+        self.horizontalLayout.addWidget(self.LoginImage)
 
 
         self.retranslateUi(Registration)
@@ -181,7 +183,7 @@ class Ui_Registration(object):
         self.RepeatPasswordlineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", None))
         self.label_8.setText(QCoreApplication.translate("Registration", u"Your name", None))
         self.FioLineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"Alex Sure", None))
-        self.RegisterpushButton.setText(QCoreApplication.translate("Registration", u"register", None))
+        self.RegisterpushButton.setText(QCoreApplication.translate("Registration", u"Register", None))
         self.LoginImage.setText("")
     # retranslateUi
 

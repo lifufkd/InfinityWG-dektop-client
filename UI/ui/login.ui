@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
-    <height>863</height>
+    <width>1269</width>
+    <height>718</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -47,19 +47,19 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
-       <number>9</number>
+       <number>10</number>
       </property>
       <property name="leftMargin">
-       <number>20</number>
+       <number>9</number>
       </property>
       <property name="topMargin">
-       <number>20</number>
+       <number>25</number>
       </property>
       <property name="rightMargin">
-       <number>20</number>
+       <number>9</number>
       </property>
       <property name="bottomMargin">
-       <number>20</number>
+       <number>25</number>
       </property>
       <item>
        <spacer name="verticalSpacer">
@@ -233,7 +233,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="HyperlinkButton" name="RegisterpushButton">
+       <widget class="PushButton" name="RegistrationpushButton">
         <property name="font">
          <font>
           <family>HoloLens MDL2 Assets</family>
@@ -309,11 +309,6 @@
   <customwidget>
    <class>CheckBox</class>
    <extends>QCheckBox</extends>
-   <header>qfluentwidgets</header>
-  </customwidget>
-  <customwidget>
-   <class>HyperlinkButton</class>
-   <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
  </customwidgets>

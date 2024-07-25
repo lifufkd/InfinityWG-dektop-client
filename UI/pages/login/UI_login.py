@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'loginrYpQCK.ui'
+## Form generated from reading UI file 'loginGSZFTR.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -19,15 +19,15 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QLineEdit, QSizePolicy, QSpacerItem, QVBoxLayout,
     QWidget)
 
-from qfluentwidgets import (BodyLabel, CheckBox, HyperlinkButton, LineEdit,
-    PrimaryPushButton, PushButton)
+from qfluentwidgets import (BodyLabel, CheckBox, LineEdit, PrimaryPushButton,
+    PushButton)
 import resources.UI_resources
 
 class Ui_Login(object):
     def setupUi(self, Login):
         if not Login.objectName():
             Login.setObjectName(u"Login")
-        Login.resize(1212, 863)
+        Login.resize(1269, 718)
         Login.setMinimumSize(QSize(700, 500))
         self.horizontalLayout = QHBoxLayout(Login)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -44,9 +44,9 @@ class Ui_Login(object):
 "	font: 13px 'Microsoft YaHei'\n"
 "}")
         self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setSpacing(9)
+        self.verticalLayout_2.setSpacing(10)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(20, 20, 20, 20)
+        self.verticalLayout_2.setContentsMargins(9, 25, 9, 25)
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
@@ -120,11 +120,11 @@ class Ui_Login(object):
 
         self.verticalLayout_2.addItem(self.verticalSpacer_6)
 
-        self.RegisterpushButton = HyperlinkButton(self.widget)
-        self.RegisterpushButton.setObjectName(u"RegisterpushButton")
-        self.RegisterpushButton.setFont(font)
+        self.RegistrationpushButton = PushButton(self.widget)
+        self.RegistrationpushButton.setObjectName(u"RegistrationpushButton")
+        self.RegistrationpushButton.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.RegisterpushButton)
+        self.verticalLayout_2.addWidget(self.RegistrationpushButton)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -153,12 +153,12 @@ class Ui_Login(object):
         Login.setWindowTitle(QCoreApplication.translate("Login", u"Form", None))
         self.Logo.setText("")
         self.label_5.setText(QCoreApplication.translate("Login", u"Login", None))
-        self.LoginlineEdit.setPlaceholderText(QCoreApplication.translate("Login", u"example@example.com", None))
+        self.LoginlineEdit.setPlaceholderText(QCoreApplication.translate("Login", u"WG-admin", None))
         self.label_6.setText(QCoreApplication.translate("Login", u"Password", None))
         self.PasswordlineEdit.setPlaceholderText(QCoreApplication.translate("Login", u"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", None))
         self.RememberMecheckBox.setText(QCoreApplication.translate("Login", u"Remember me", None))
         self.LoginpushButton.setText(QCoreApplication.translate("Login", u"Login", None))
-        self.RegisterpushButton.setText(QCoreApplication.translate("Login", u"Register", None))
+        self.RegistrationpushButton.setText(QCoreApplication.translate("Login", u"Registration", None))
         self.LoginImage.setText("")
     # retranslateUi
 

@@ -19,8 +19,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -46,8 +46,17 @@
 }</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>25</number>
+      </property>
+      <property name="bottomMargin">
+       <number>25</number>
+      </property>
       <item>
-       <widget class="TransparentToolButton" name="pinButton">
+       <widget class="TransparentToolButton" name="LoginPushButton">
         <property name="iconSize">
          <size>
           <width>25</width>
@@ -246,7 +255,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="HyperlinkButton" name="RegisterpushButton">
+       <widget class="PrimaryPushButton" name="RegisterpushButton">
         <property name="font">
          <font>
           <family>HoloLens MDL2 Assets</family>
@@ -254,7 +263,7 @@
          </font>
         </property>
         <property name="text">
-         <string>register</string>
+         <string>Register</string>
         </property>
        </widget>
       </item>
@@ -274,7 +283,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item>
     <widget class="QLabel" name="LoginImage">
      <property name="frameShape">
       <enum>QFrame::Shape::NoFrame</enum>
@@ -297,6 +306,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>PrimaryPushButton</class>
+   <extends>PushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
    <class>BodyLabel</class>
    <extends>QLabel</extends>
    <header>qfluentwidgets</header>
@@ -304,11 +323,6 @@
   <customwidget>
    <class>LineEdit</class>
    <extends>QLineEdit</extends>
-   <header>qfluentwidgets</header>
-  </customwidget>
-  <customwidget>
-   <class>HyperlinkButton</class>
-   <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
