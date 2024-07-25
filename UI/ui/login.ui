@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1235</width>
-    <height>837</height>
+    <width>1212</width>
+    <height>863</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -134,7 +134,7 @@
       <item>
        <widget class="LineEdit" name="LoginlineEdit">
         <property name="placeholderText">
-         <string>example@example.com</string>
+         <string>WG-admin</string>
         </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>
@@ -205,6 +205,12 @@
       </item>
       <item>
        <widget class="PrimaryPushButton" name="LoginpushButton">
+        <property name="font">
+         <font>
+          <family>HoloLens MDL2 Assets</family>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Login</string>
         </property>
@@ -228,8 +234,14 @@
       </item>
       <item>
        <widget class="HyperlinkButton" name="RegisterpushButton">
+        <property name="font">
+         <font>
+          <family>HoloLens MDL2 Assets</family>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>Register</string>
+         <string>Registration</string>
         </property>
        </widget>
       </item>
@@ -251,6 +263,9 @@
    </item>
    <item>
     <widget class="QLabel" name="LoginImage">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::NoFrame</enum>
      </property>
@@ -262,6 +277,9 @@
      </property>
      <property name="scaledContents">
       <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>25</number>
      </property>
     </widget>
    </item>
@@ -301,7 +319,6 @@
  </customwidgets>
  <resources>
   <include location="resource.qrc"/>
-  <include location="../../Documents/PythonProjects/InfinityWG-desktop-client/UI/ui/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

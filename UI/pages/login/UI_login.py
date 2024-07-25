@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'loginnZtMNu.ui'
+## Form generated from reading UI file 'loginrYpQCK.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -21,13 +21,13 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
 
 from qfluentwidgets import (BodyLabel, CheckBox, HyperlinkButton, LineEdit,
     PrimaryPushButton, PushButton)
-import resource_rc
+import resources.UI_resources
 
 class Ui_Login(object):
     def setupUi(self, Login):
         if not Login.objectName():
             Login.setObjectName(u"Login")
-        Login.resize(1235, 837)
+        Login.resize(1212, 863)
         Login.setMinimumSize(QSize(700, 500))
         self.horizontalLayout = QHBoxLayout(Login)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -109,6 +109,10 @@ class Ui_Login(object):
 
         self.LoginpushButton = PrimaryPushButton(self.widget)
         self.LoginpushButton.setObjectName(u"LoginpushButton")
+        font = QFont()
+        font.setFamilies([u"HoloLens MDL2 Assets"])
+        font.setPointSize(16)
+        self.LoginpushButton.setFont(font)
 
         self.verticalLayout_2.addWidget(self.LoginpushButton)
 
@@ -118,6 +122,7 @@ class Ui_Login(object):
 
         self.RegisterpushButton = HyperlinkButton(self.widget)
         self.RegisterpushButton.setObjectName(u"RegisterpushButton")
+        self.RegisterpushButton.setFont(font)
 
         self.verticalLayout_2.addWidget(self.RegisterpushButton)
 
@@ -130,9 +135,11 @@ class Ui_Login(object):
 
         self.LoginImage = QLabel(Login)
         self.LoginImage.setObjectName(u"LoginImage")
+        self.LoginImage.setAutoFillBackground(False)
         self.LoginImage.setFrameShape(QFrame.Shape.NoFrame)
         self.LoginImage.setPixmap(QPixmap(u":/login/resources/images/login_background.jpg"))
         self.LoginImage.setScaledContents(True)
+        self.LoginImage.setMargin(25)
 
         self.horizontalLayout.addWidget(self.LoginImage)
 

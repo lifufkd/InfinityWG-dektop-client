@@ -17,7 +17,7 @@ class singledispatchmethod:
         self.func = func
 
     def register(self, cls, method=None):
-        """generic_method.registeration(cls, func) -> func
+        """generic_method.registration(cls, func) -> func
 
         Registers a new implementation for the given *cls* on a *generic_method*.
         """

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'registerLyMmXZ.ui'
+## Form generated from reading UI file 'registerWBxrmo.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -19,8 +19,9 @@ from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
 
-from qfluentwidgets import (BodyLabel, HyperlinkButton, LineEdit)
-import resource_rc
+from qfluentwidgets import (BodyLabel, HyperlinkButton, LineEdit, ToolButton,
+    TransparentToolButton)
+import resources.UI_resources
 
 class Ui_Registration(object):
     def setupUi(self, Registration):
@@ -44,16 +45,22 @@ class Ui_Registration(object):
 "}")
         self.verticalLayout = QVBoxLayout(self.widget)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.pinButton = TransparentToolButton(self.widget)
+        self.pinButton.setObjectName(u"pinButton")
+        self.pinButton.setIconSize(QSize(25, 25))
+
+        self.verticalLayout.addWidget(self.pinButton)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
-        self.horizontalLayout_1 = QHBoxLayout()
-        self.horizontalLayout_1.setObjectName(u"horizontalLayout_1")
-        self.horizontalLayout_1.setContentsMargins(5, -1, -1, -1)
+        self.Logo_Layout = QHBoxLayout()
+        self.Logo_Layout.setObjectName(u"Logo_Layout")
+        self.Logo_Layout.setContentsMargins(5, -1, -1, -1)
         self.HorizontalSpacerSelectCOuntry_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_1.addItem(self.HorizontalSpacerSelectCOuntry_2)
+        self.Logo_Layout.addItem(self.HorizontalSpacerSelectCOuntry_2)
 
         self.Logo = QLabel(self.widget)
         self.Logo.setObjectName(u"Logo")
@@ -68,14 +75,14 @@ class Ui_Registration(object):
         self.Logo.setPixmap(QPixmap(u":/login/resources/images/logo.svg"))
         self.Logo.setScaledContents(True)
 
-        self.horizontalLayout_1.addWidget(self.Logo)
+        self.Logo_Layout.addWidget(self.Logo)
 
         self.HorizontalSpacerSelectCOuntry = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_1.addItem(self.HorizontalSpacerSelectCOuntry)
+        self.Logo_Layout.addItem(self.HorizontalSpacerSelectCOuntry)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_1)
+        self.verticalLayout.addLayout(self.Logo_Layout)
 
         self.verticalSpacer_3 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -109,24 +116,24 @@ class Ui_Registration(object):
 
         self.verticalLayout.addWidget(self.label_7)
 
-        self.RepeatPasswordlineEdit_2 = LineEdit(self.widget)
-        self.RepeatPasswordlineEdit_2.setObjectName(u"RepeatPasswordlineEdit_2")
-        self.RepeatPasswordlineEdit_2.setEchoMode(QLineEdit.EchoMode.Password)
-        self.RepeatPasswordlineEdit_2.setClearButtonEnabled(True)
+        self.RepeatPasswordlineEdit = LineEdit(self.widget)
+        self.RepeatPasswordlineEdit.setObjectName(u"RepeatPasswordlineEdit")
+        self.RepeatPasswordlineEdit.setEchoMode(QLineEdit.EchoMode.Password)
+        self.RepeatPasswordlineEdit.setClearButtonEnabled(True)
 
-        self.verticalLayout.addWidget(self.RepeatPasswordlineEdit_2)
+        self.verticalLayout.addWidget(self.RepeatPasswordlineEdit)
 
         self.label_8 = BodyLabel(self.widget)
         self.label_8.setObjectName(u"label_8")
 
         self.verticalLayout.addWidget(self.label_8)
 
-        self.FioLineEdit_3 = LineEdit(self.widget)
-        self.FioLineEdit_3.setObjectName(u"FioLineEdit_3")
-        self.FioLineEdit_3.setEchoMode(QLineEdit.EchoMode.Password)
-        self.FioLineEdit_3.setClearButtonEnabled(True)
+        self.FioLineEdit = LineEdit(self.widget)
+        self.FioLineEdit.setObjectName(u"FioLineEdit")
+        self.FioLineEdit.setEchoMode(QLineEdit.EchoMode.Password)
+        self.FioLineEdit.setClearButtonEnabled(True)
 
-        self.verticalLayout.addWidget(self.FioLineEdit_3)
+        self.verticalLayout.addWidget(self.FioLineEdit)
 
         self.verticalSpacer_4 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -134,6 +141,10 @@ class Ui_Registration(object):
 
         self.RegisterpushButton = HyperlinkButton(self.widget)
         self.RegisterpushButton.setObjectName(u"RegisterpushButton")
+        font = QFont()
+        font.setFamilies([u"HoloLens MDL2 Assets"])
+        font.setPointSize(16)
+        self.RegisterpushButton.setFont(font)
 
         self.verticalLayout.addWidget(self.RegisterpushButton)
 
@@ -149,6 +160,7 @@ class Ui_Registration(object):
         self.LoginImage.setFrameShape(QFrame.Shape.NoFrame)
         self.LoginImage.setPixmap(QPixmap(u":/login/resources/images/register_background.jpg"))
         self.LoginImage.setScaledContents(True)
+        self.LoginImage.setMargin(25)
 
         self.gridLayout.addWidget(self.LoginImage, 0, 1, 1, 1)
 
@@ -162,14 +174,14 @@ class Ui_Registration(object):
         Registration.setWindowTitle(QCoreApplication.translate("Registration", u"Form", None))
         self.Logo.setText("")
         self.label_5.setText(QCoreApplication.translate("Registration", u"Login", None))
-        self.LoginlineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"example@example.com", None))
+        self.LoginlineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"WG-admin", None))
         self.label_6.setText(QCoreApplication.translate("Registration", u"Password", None))
         self.PasswordlineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", None))
         self.label_7.setText(QCoreApplication.translate("Registration", u"Repeat Password", None))
-        self.RepeatPasswordlineEdit_2.setPlaceholderText(QCoreApplication.translate("Registration", u"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", None))
+        self.RepeatPasswordlineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", None))
         self.label_8.setText(QCoreApplication.translate("Registration", u"Your name", None))
-        self.FioLineEdit_3.setPlaceholderText(QCoreApplication.translate("Registration", u"Alex Sure", None))
-        self.RegisterpushButton.setText(QCoreApplication.translate("Registration", u"Register", None))
+        self.FioLineEdit.setPlaceholderText(QCoreApplication.translate("Registration", u"Alex Sure", None))
+        self.RegisterpushButton.setText(QCoreApplication.translate("Registration", u"register", None))
         self.LoginImage.setText("")
     # retranslateUi
 

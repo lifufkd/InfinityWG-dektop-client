@@ -30,7 +30,7 @@ class LoginWindow(Window, Ui_Form):
 
         self.label.setScaledContents(False)
         self.setWindowTitle('PyQt-Fluent-Widget')
-        self.setWindowIcon(QIcon(":/images/logo.png"))
+        self.setWindowIcon(QIcon("resource/images/logo.png"))
         self.resize(1000, 650)
 
         self.windowEffect.setMicaEffect(self.winId(), isDarkMode=isDarkTheme())

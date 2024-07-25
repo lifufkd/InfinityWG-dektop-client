@@ -390,7 +390,7 @@ class InfoBadgeManager(QObject):
 
     @classmethod
     def register(cls, name):
-        """ registeration menu animation manager
+        """ registration menu animation manager
 
         Parameters
         ----------

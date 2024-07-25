@@ -47,6 +47,16 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="TransparentToolButton" name="pinButton">
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Orientation::Vertical</enum>
@@ -60,7 +70,7 @@
        </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_1">
+       <layout class="QHBoxLayout" name="Logo_Layout">
         <property name="leftMargin">
          <number>5</number>
         </property>
@@ -152,7 +162,7 @@
       <item>
        <widget class="LineEdit" name="LoginlineEdit">
         <property name="placeholderText">
-         <string>example@example.com</string>
+         <string>WG-admin</string>
         </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>
@@ -187,7 +197,7 @@
        </widget>
       </item>
       <item>
-       <widget class="LineEdit" name="RepeatPasswordlineEdit_2">
+       <widget class="LineEdit" name="RepeatPasswordlineEdit">
         <property name="echoMode">
          <enum>QLineEdit::EchoMode::Password</enum>
         </property>
@@ -207,7 +217,7 @@
        </widget>
       </item>
       <item>
-       <widget class="LineEdit" name="FioLineEdit_3">
+       <widget class="LineEdit" name="FioLineEdit">
         <property name="echoMode">
          <enum>QLineEdit::EchoMode::Password</enum>
         </property>
@@ -237,8 +247,14 @@
       </item>
       <item>
        <widget class="HyperlinkButton" name="RegisterpushButton">
+        <property name="font">
+         <font>
+          <family>HoloLens MDL2 Assets</family>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>Register</string>
+         <string>register</string>
         </property>
        </widget>
       </item>
@@ -272,6 +288,9 @@
      <property name="scaledContents">
       <bool>true</bool>
      </property>
+     <property name="margin">
+      <number>25</number>
+     </property>
     </widget>
    </item>
   </layout>
@@ -292,10 +311,20 @@
    <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
+  <customwidget>
+   <class>ToolButton</class>
+   <extends>QToolButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TransparentToolButton</class>
+   <extends>ToolButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="resource.qrc"/>
-  <include location="../../Documents/PythonProjects/InfinityWG-desktop-client/UI/ui/resource.qrc"/>
+  <include location="../../../../../.designer/backup/resource.qrc"/>
  </resources>
  <connections/>
 </ui>
