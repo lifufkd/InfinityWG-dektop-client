@@ -29,7 +29,7 @@ galleryTranslator.load(locale, "gallery", ".", ":/gallery/i18n")
 app.installTranslator(translator)
 app.installTranslator(galleryTranslator)
 
-# create main window
+# create home window
 w = MainWindow()
 w.show()
 

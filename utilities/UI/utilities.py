@@ -6,7 +6,7 @@ import sys
 from typing import Optional
 
 from PySide6.QtCore import Qt
-from qfluentwidgets import InfoBar, InfoBarPosition
+from qfluentwidgets import InfoBar, InfoBarPosition, InfoBarIcon
 
 ##########################
 
@@ -44,6 +44,19 @@ def createWarningInfoBar(parent, title: str, content: str):
         content=content,
         orient=Qt.Horizontal,
         isClosable=False,  # disable close button
+        position=InfoBarPosition.TOP_RIGHT,
+        duration=5000,
+        parent=parent
+    )
+
+
+def createInfoInfoBar(parent, title: str, content: str):
+    InfoBar(
+        icon=InfoBarIcon.INFORMATION,
+        title=title,
+        content=content,
+        orient=Qt.Vertical,  # vertical layout
+        isClosable=True,
         position=InfoBarPosition.TOP_RIGHT,
         duration=5000,
         parent=parent

@@ -18,4 +18,4 @@ class Config(QConfig):
         self.setup_config()
 
     def setup_config(self):
-        qconfig.load('../config.json', self)
+        qconfig.load('config.json', self)

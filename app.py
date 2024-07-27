@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentTranslator
 from PySide6.QtCore import QLocale
 
-from utilities.UI.config import Config
+from utilities.config import Config
 from API.Requests import Authorization
 from UI.main import App
 ##########################

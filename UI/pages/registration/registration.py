@@ -2,7 +2,6 @@
 #       Created By       #
 #          SBR           #
 ##########################
-import sys
 from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
@@ -21,13 +20,13 @@ Window = select_window()
 
 class RegistrationWindow(Window, Ui_Registration):
     sw_open_app = Signal()
+    sw_open_login = Signal()
 
-    def __init__(self, authorization: Authorization, parent=None):
+    def __init__(self, authorization: Authorization):
         super().__init__()
         self.setupUi(self)
         setTheme(Theme.AUTO)
 
-        self._login_page = parent
         self._authorization = authorization
         self.setTitleBar(SplitTitleBar(self))
         self.titleBar.raise_()
@@ -47,7 +46,7 @@ class RegistrationWindow(Window, Ui_Registration):
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
 
         self.RegisterpushButton.clicked.connect(self.registrate)
-        self.LoginPushButton.clicked.connect(self.open_login_page)
+        self.LoginPushButton.clicked.connect(self.open_login)
         self.LoginPushButton.setIcon(FluentIcon.RETURN)
 
     def registrate(self):
@@ -99,9 +98,8 @@ class RegistrationWindow(Window, Ui_Registration):
     def open_app(self):
         self.sw_open_app.emit()
 
-    def open_login_page(self):
-        self._login_page.show()
-        self.hide()
+    def open_login(self):
+        self.sw_open_login.emit()
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

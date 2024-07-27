@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainiOWGGH.ui'
+## Form generated from reading UI file 'mainxcAXeB.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -21,15 +21,15 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLayout,
 from qfluentwidgets import (BodyLabel, CardWidget, IconWidget, PrimaryPushButton,
     PushButton, ToolButton, TransparentToolButton)
 
-class Ui_Main(object):
-    def setupUi(self, Main):
-        if not Main.objectName():
-            Main.setObjectName(u"Main")
-        Main.setWindowModality(Qt.WindowModality.NonModal)
-        Main.resize(874, 759)
-        self.gridLayout = QGridLayout(Main)
+class Ui_Home(object):
+    def setupUi(self, Home):
+        if not Home.objectName():
+            Home.setObjectName(u"Home")
+        Home.setWindowModality(Qt.WindowModality.NonModal)
+        Home.resize(874, 759)
+        self.gridLayout = QGridLayout(Home)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.ConnectionCard = CardWidget(Main)
+        self.ConnectionCard = CardWidget(Home)
         self.ConnectionCard.setObjectName(u"ConnectionCard")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -170,16 +170,16 @@ class Ui_Main(object):
         self.gridLayout.addWidget(self.ConnectionCard, 0, 0, 1, 1)
 
 
-        self.retranslateUi(Main)
+        self.retranslateUi(Home)
 
-        QMetaObject.connectSlotsByName(Main)
+        QMetaObject.connectSlotsByName(Home)
     # setupUi
 
-    def retranslateUi(self, Main):
-        Main.setWindowTitle(QCoreApplication.translate("Main", u"Form", None))
-        self.hintLabel_3.setText(QCoreApplication.translate("Main", u"Russia", None))
-        self.hintLabel_2.setText(QCoreApplication.translate("Main", u"78.104.156.123", None))
-        self.ConnectBtn.setText(QCoreApplication.translate("Main", u"Loading...", None))
-        self.ChangeIpBtn.setText(QCoreApplication.translate("Main", u"change ip", None))
+    def retranslateUi(self, Home):
+        Home.setWindowTitle(QCoreApplication.translate("Home", u"Form", None))
+        self.hintLabel_3.setText(QCoreApplication.translate("Home", u"Russia", None))
+        self.hintLabel_2.setText(QCoreApplication.translate("Home", u"78.104.156.123", None))
+        self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Loading...", None))
+        self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"change ip", None))
     # retranslateUi
 

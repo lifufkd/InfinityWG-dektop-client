@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Main</class>
- <widget class="QWidget" name="Main">
+ <class>Home</class>
+ <widget class="QWidget" name="Home">
   <property name="windowModality">
    <enum>Qt::WindowModality::NonModal</enum>
   </property>
@@ -88,7 +88,7 @@
              </size>
             </property>
             <property name="icon" stdset="0">
-             <iconset resource="../../Documents/PythonProjects/InfinityWG-desktop-client/examples/examples/window/clock/resource/resource.qrc">
+             <iconset>
               <normaloff>:/images/alarms.png</normaloff>:/images/alarms.png</iconset>
             </property>
            </widget>
@@ -348,6 +348,11 @@
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
+   <class>BodyLabel</class>
+   <extends>QLabel</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
    <class>ToolButton</class>
    <extends>QToolButton</extends>
    <header>qfluentwidgets</header>
@@ -368,14 +373,7 @@
    <header>qfluentwidgets</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>BodyLabel</class>
-   <extends>QLabel</extends>
-   <header>qfluentwidgets</header>
-  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../Documents/PythonProjects/InfinityWG-desktop-client/examples/examples/window/clock/resource/resource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

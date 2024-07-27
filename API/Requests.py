@@ -4,13 +4,14 @@
 ##########################
 import requests
 from typing import Optional
+from utilities.config import Config
 ##########################
 
 ##########################
 
 
 class Authorization:
-    def __init__(self, config):
+    def __init__(self, config: Config):
         super().__init__()
         self._token = config.get(config.token)
         self._config = config
@@ -30,7 +31,7 @@ class Authorization:
         else:
             return {"status": False, **response.json()}
 
-    def login(self, login: str, password: str) -> Optional[dict]:
+    def login(self, login: str, password: str, remember_me: bool) -> Optional[dict]:
         host_url = self.get_host_url()
         request_url = host_url + "/users/login"
         data = {
@@ -40,6 +41,8 @@ class Authorization:
         response = requests.post(request_url, data=data)
         if response.status_code == 200:
             self._token = response.json()['access_token']
+            if remember_me:
+                self._config.set(self._config.token, self._token)
             return {"status": True, **response.json()}
         else:
             return {"status": False, **response.json()}

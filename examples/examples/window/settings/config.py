@@ -62,7 +62,7 @@ class Config(QConfig):
     onlineMvQuality = OptionsConfigItem(
         "Online", "MvQuality", MvQuality.FULL_HD, OptionsValidator(MvQuality), EnumSerializer(MvQuality))
 
-    # main window
+    # home window
     enableAcrylicBackground = ConfigItem(
         "MainWindow", "EnableAcrylicBackground", False, BoolValidator())
     minimizeToTray = ConfigItem(
@@ -117,4 +117,5 @@ RELEASE_URL = "https://github.com/zhiyiYo/PyQt-Fluent-Widgets/releases/latest"
 
 
 cfg = Config()
+cfg.set
 qconfig.load('config/config.json', cfg)

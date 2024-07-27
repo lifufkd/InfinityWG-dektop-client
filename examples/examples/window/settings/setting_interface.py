@@ -158,7 +158,7 @@ class SettingInterface(ScrollArea):
             parent=self.deskLyricGroup
         )
 
-        # main panel
+        # home panel
         self.mainPanelGroup = SettingCardGroup(self.tr('Main Panel'), self.scrollWidget)
         self.minimizeToTrayCard = SwitchSettingCard(
             FIF.MINIMIZE,
@@ -323,7 +323,7 @@ class SettingInterface(ScrollArea):
         # playing interface
         self.deskLyricFontCard.clicked.connect(self.__onDeskLyricFontCardClicked)
 
-        # main panel
+        # home panel
         self.minimizeToTrayCard.checkedChanged.connect(
             self.minimizeToTrayChanged)
 

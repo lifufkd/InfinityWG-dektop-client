@@ -159,7 +159,7 @@ class StateToolTip(QWidget):
         self.update()
 
     def getSuitablePos(self):
-        """ get suitable position in main window """
+        """ get suitable position in home window """
         for i in range(10):
             dy = i*(self.height() + 16)
             pos = QPoint(self.parent().width() - self.width() - 24, 50+dy)

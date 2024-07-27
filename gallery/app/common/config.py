@@ -40,7 +40,7 @@ class Config(QConfig):
     downloadFolder = ConfigItem(
         "Folders", "Download", "app/download", FolderValidator())
 
-    # main window
+    # home window
     micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())
     dpiScale = OptionsConfigItem(
         "MainWindow", "DpiScale", "Auto", OptionsValidator([1, 1.25, 1.5, 1.75, 2, "Auto"]), restart=True)

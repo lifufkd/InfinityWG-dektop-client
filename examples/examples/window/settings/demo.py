@@ -60,7 +60,7 @@ if __name__ == '__main__':
     app.installTranslator(fluentTranslator)
     app.installTranslator(settingTranslator)
 
-    # create main window
+    # create home window
     w = Window()
     w.show()
     app.exec()
