@@ -13,6 +13,9 @@ class Config(QConfig):
         "System", "host", "http://localhost:8000"
     )
 
+    def __init__(self):
+        super().__init__()
+        self.setup_config()
 
-cfg = Config()
-qconfig.load('../config.json', cfg)
+    def setup_config(self):
+        qconfig.load('../config.json', self)

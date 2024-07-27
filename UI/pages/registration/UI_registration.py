@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'registerKdodkR.ui'
+## Form generated from reading UI file 'registerNskWar.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -132,7 +132,7 @@ class Ui_Registration(object):
 
         self.FioLineEdit = LineEdit(self.widget)
         self.FioLineEdit.setObjectName(u"FioLineEdit")
-        self.FioLineEdit.setEchoMode(QLineEdit.EchoMode.Password)
+        self.FioLineEdit.setEchoMode(QLineEdit.EchoMode.Normal)
         self.FioLineEdit.setClearButtonEnabled(True)
 
         self.verticalLayout.addWidget(self.FioLineEdit)

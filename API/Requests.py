@@ -12,7 +12,7 @@ from typing import Optional
 class Authorization:
     def __init__(self, config):
         super().__init__()
-        self._token = None
+        self._token = config.get(config.token)
         self._config = config
 
     def get_host_url(self):

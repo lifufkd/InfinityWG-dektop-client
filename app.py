@@ -3,30 +3,28 @@
 #          SBR           #
 ##########################
 import sys
+
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
-from qfluentwidgets import setTheme, Theme
-from PySide6.QtGui import QIcon
-from qframelesswindow import FramelessWindow
-from UI.sidebar import SideBar
-from UI.TitleBar import CustomTitleBar
-##########################
-config_path = 'config.json'
+from qfluentwidgets import FluentTranslator
+from PySide6.QtCore import QLocale
+
+from utilities.UI.config import Config
+from API.Requests import Authorization
+from UI.main import App
 ##########################
 
-
-class Window(FramelessWindow):
-    def __init__(self):
-        super().__init__()
-        setTheme(Theme.AUTO)
-        SideBar(self)
+##########################
 
 
+def start_gui() -> None:
+    app = QApplication(sys.argv)
+    app.installTranslator(FluentTranslator(QLocale()))  # TODO: Change to config load method
+    window = App(authorization, authorization.check_token()["status"])
+    app.exec()
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    w = Window()
-    w.show()
-    app.exec()
+    config = Config()
+    authorization = Authorization(config)
+    start_gui()
     
