@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'loginGSZFTR.ui'
+## Form generated from reading UI file 'loginbvkKmD.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QWidget)
 
 from qfluentwidgets import (BodyLabel, CheckBox, LineEdit, PrimaryPushButton,
-    PushButton)
+    PushButton, ToolButton, TransparentToolButton)
 import resources.UI_resources
 
 class Ui_Login(object):
@@ -129,6 +129,12 @@ class Ui_Login(object):
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
+
+        self.SettingsPushButton = TransparentToolButton(self.widget)
+        self.SettingsPushButton.setObjectName(u"SettingsPushButton")
+        self.SettingsPushButton.setIconSize(QSize(25, 25))
+
+        self.verticalLayout_2.addWidget(self.SettingsPushButton)
 
 
         self.horizontalLayout.addWidget(self.widget)

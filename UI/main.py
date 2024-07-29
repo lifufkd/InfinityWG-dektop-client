@@ -4,8 +4,7 @@
 ##########################
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from qfluentwidgets import (NavigationItemPosition,
-                            NavigationAvatarWidget,  SplitFluentWindow)
+from qfluentwidgets import NavigationItemPosition, SplitFluentWindow
 from qfluentwidgets import FluentIcon as FIF
 
 from UI.pages.login.login import LoginWindow
@@ -13,7 +12,6 @@ from UI.pages.registration.registration import RegistrationWindow
 from UI.pages.home.home import Home
 from resources.vars import APP_NAME
 from API.Requests import Authorization
-from utilities.UI.utilities import createInfoInfoBar
 ##########################
 
 ##########################
@@ -22,7 +20,6 @@ from utilities.UI.utilities import createInfoInfoBar
 class Main(SplitFluentWindow):
     def __init__(self):
         super().__init__()
-        # TODO: Fix development tip when press to logo
         # create sub interface
         self.focusInterface = Home(self)
 
@@ -33,12 +30,6 @@ class Main(SplitFluentWindow):
         # add sub interface
         self.addSubInterface(self.focusInterface, FIF.HOME, 'Home')
 
-        self.navigationInterface.addWidget(
-            routeKey='avatar',
-            widget=NavigationAvatarWidget('SBR', 'resources/images/shoko.png'),
-            onClick=self.open_dev_info_bar,
-            position=NavigationItemPosition.BOTTOM,
-        )
         self.navigationInterface.addItem(
             routeKey='settingInterface',
             icon=FIF.SETTING,
@@ -56,9 +47,6 @@ class Main(SplitFluentWindow):
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
-
-    def open_dev_info_bar(self):
-        createInfoInfoBar(parent=self, title="Soon", content="This feather will be added soon...")
 
 
 class App:

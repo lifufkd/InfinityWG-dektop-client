@@ -19,13 +19,19 @@ class Authorization:
     def get_host_url(self):
         return self._config.get(self._config.host)
 
+    def change_host_url(self, host_url):
+        self._config.set(self._config.host, host_url)
+
     def check_token(self) -> Optional[dict]:
         host_url = self.get_host_url()
         request_url = host_url + "/users/check/token"
         headers = {
             "Authorization": f"Bearer {self._token}"
         }
-        response = requests.get(request_url, headers=headers)
+        try:
+            response = requests.get(request_url, headers=headers)
+        except Exception as e:
+            return {"status": False, "detail": e}
         if response.status_code == 200:
             return {"status": True, **response.json()}
         else:
@@ -38,7 +44,10 @@ class Authorization:
             "username": login,
             "password": password
         }
-        response = requests.post(request_url, data=data)
+        try:
+            response = requests.post(request_url, data=data)
+        except Exception as e:
+            return {"status": False, "detail": e}
         if response.status_code == 200:
             self._token = response.json()['access_token']
             if remember_me:
@@ -55,7 +64,10 @@ class Authorization:
             "password": password,
             "full_name": full_name
         }
-        response = requests.post(request_url, json=data)
+        try:
+            response = requests.post(request_url, json=data)
+        except Exception as e:
+            return {"status": False, "detail": e}
         if response.status_code == 200:
             return {"status": True, **response.json()}
         else:

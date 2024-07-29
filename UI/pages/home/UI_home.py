@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainxcAXeB.ui'
+## Form generated from reading UI file 'homeuRPSZV.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLayout,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLayout, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 from qfluentwidgets import (BodyLabel, CardWidget, IconWidget, PrimaryPushButton,
     PushButton, ToolButton, TransparentToolButton)
@@ -26,9 +26,9 @@ class Ui_Home(object):
         if not Home.objectName():
             Home.setObjectName(u"Home")
         Home.setWindowModality(Qt.WindowModality.NonModal)
-        Home.resize(874, 759)
-        self.gridLayout = QGridLayout(Home)
-        self.gridLayout.setObjectName(u"gridLayout")
+        Home.resize(418, 300)
+        self.horizontalLayout = QHBoxLayout(Home)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.ConnectionCard = CardWidget(Home)
         self.ConnectionCard.setObjectName(u"ConnectionCard")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -36,7 +36,7 @@ class Ui_Home(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ConnectionCard.sizePolicy().hasHeightForWidth())
         self.ConnectionCard.setSizePolicy(sizePolicy)
-        self.ConnectionCard.setMinimumSize(QSize(380, 410))
+        self.ConnectionCard.setMinimumSize(QSize(400, 250))
         self.ConnectionCard.setMaximumSize(QSize(600, 600))
         font = QFont()
         font.setFamilies([u"Arial"])
@@ -56,45 +56,45 @@ class Ui_Home(object):
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(5, -1, -1, -1)
-        self.CountryIcon_2 = IconWidget(self.ConnectionCard)
-        self.CountryIcon_2.setObjectName(u"CountryIcon_2")
-        self.CountryIcon_2.setMinimumSize(QSize(20, 20))
-        self.CountryIcon_2.setMaximumSize(QSize(20, 20))
+        self.CountryIcon = IconWidget(self.ConnectionCard)
+        self.CountryIcon.setObjectName(u"CountryIcon")
+        self.CountryIcon.setMinimumSize(QSize(20, 20))
+        self.CountryIcon.setMaximumSize(QSize(20, 20))
         icon = QIcon()
         icon.addFile(u":/images/alarms.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.CountryIcon_2.setProperty("icon", icon)
+        self.CountryIcon.setProperty("icon", icon)
 
-        self.horizontalLayout_2.addWidget(self.CountryIcon_2)
+        self.horizontalLayout_2.addWidget(self.CountryIcon)
 
         self.HorizontalSpacerSelectCOuntry_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_5)
 
-        self.hintLabel_3 = BodyLabel(self.ConnectionCard)
-        self.hintLabel_3.setObjectName(u"hintLabel_3")
-        self.hintLabel_3.setFont(font)
-        self.hintLabel_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.hintLabel_3.setWordWrap(True)
-        self.hintLabel_3.setMargin(0)
-        self.hintLabel_3.setProperty("lightColor", QColor(96, 96, 96))
-        self.hintLabel_3.setProperty("darkColor", QColor(206, 206, 206))
+        self.CurrentCountryText = BodyLabel(self.ConnectionCard)
+        self.CurrentCountryText.setObjectName(u"CurrentCountryText")
+        self.CurrentCountryText.setFont(font)
+        self.CurrentCountryText.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.CurrentCountryText.setWordWrap(True)
+        self.CurrentCountryText.setMargin(0)
+        self.CurrentCountryText.setProperty("lightColor", QColor(96, 96, 96))
+        self.CurrentCountryText.setProperty("darkColor", QColor(206, 206, 206))
 
-        self.horizontalLayout_2.addWidget(self.hintLabel_3)
+        self.horizontalLayout_2.addWidget(self.CurrentCountryText)
 
         self.HorizontalSpacerSelectCOuntry_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_6)
 
-        self.moreButton_3 = TransparentToolButton(self.ConnectionCard)
-        self.moreButton_3.setObjectName(u"moreButton_3")
+        self.ChooseServerButton = TransparentToolButton(self.ConnectionCard)
+        self.ChooseServerButton.setObjectName(u"ChooseServerButton")
         font1 = QFont()
         font1.setFamilies([u"Arial"])
         font1.setPointSize(20)
         font1.setItalic(False)
         font1.setKerning(True)
-        self.moreButton_3.setFont(font1)
+        self.ChooseServerButton.setFont(font1)
 
-        self.horizontalLayout_2.addWidget(self.moreButton_3)
+        self.horizontalLayout_2.addWidget(self.ChooseServerButton)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -106,16 +106,16 @@ class Ui_Home(object):
 
         self.horizontalLayout_1.addItem(self.HorizontalSpacerSelectCOuntry_2)
 
-        self.hintLabel_2 = BodyLabel(self.ConnectionCard)
-        self.hintLabel_2.setObjectName(u"hintLabel_2")
-        self.hintLabel_2.setFont(font)
-        self.hintLabel_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.hintLabel_2.setWordWrap(True)
-        self.hintLabel_2.setMargin(0)
-        self.hintLabel_2.setProperty("lightColor", QColor(96, 96, 96))
-        self.hintLabel_2.setProperty("darkColor", QColor(206, 206, 206))
+        self.CurrentIPText = BodyLabel(self.ConnectionCard)
+        self.CurrentIPText.setObjectName(u"CurrentIPText")
+        self.CurrentIPText.setFont(font)
+        self.CurrentIPText.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.CurrentIPText.setWordWrap(True)
+        self.CurrentIPText.setMargin(0)
+        self.CurrentIPText.setProperty("lightColor", QColor(96, 96, 96))
+        self.CurrentIPText.setProperty("darkColor", QColor(206, 206, 206))
 
-        self.horizontalLayout_1.addWidget(self.hintLabel_2)
+        self.horizontalLayout_1.addWidget(self.CurrentIPText)
 
         self.HorizontalSpacerSelectCOuntry = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -134,8 +134,8 @@ class Ui_Home(object):
         self.ConnectBtn = PrimaryPushButton(self.ConnectionCard)
         self.ConnectBtn.setObjectName(u"ConnectBtn")
         font2 = QFont()
-        font2.setFamilies([u"Arial Black"])
-        font2.setPointSize(14)
+        font2.setFamilies([u"HoloLens MDL2 Assets"])
+        font2.setPointSize(16)
         self.ConnectBtn.setFont(font2)
         self.ConnectBtn.setAutoDefault(True)
 
@@ -167,7 +167,7 @@ class Ui_Home(object):
         self.verticalLayout_3.addItem(self.TopVerticalSpacer)
 
 
-        self.gridLayout.addWidget(self.ConnectionCard, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.ConnectionCard)
 
 
         self.retranslateUi(Home)
@@ -177,8 +177,8 @@ class Ui_Home(object):
 
     def retranslateUi(self, Home):
         Home.setWindowTitle(QCoreApplication.translate("Home", u"Form", None))
-        self.hintLabel_3.setText(QCoreApplication.translate("Home", u"Russia", None))
-        self.hintLabel_2.setText(QCoreApplication.translate("Home", u"78.104.156.123", None))
+        self.CurrentCountryText.setText(QCoreApplication.translate("Home", u"Russia", None))
+        self.CurrentIPText.setText(QCoreApplication.translate("Home", u"78.104.156.123", None))
         self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Loading...", None))
         self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"change ip", None))
     # retranslateUi

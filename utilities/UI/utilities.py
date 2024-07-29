@@ -6,8 +6,7 @@ import sys
 from typing import Optional
 
 from PySide6.QtCore import Qt
-from qfluentwidgets import InfoBar, InfoBarPosition, InfoBarIcon
-
+from qfluentwidgets import InfoBar, InfoBarPosition, InfoBarIcon, MessageBoxBase, SubtitleLabel, LineEdit
 ##########################
 
 ##########################
@@ -23,6 +22,24 @@ def select_window() -> Optional[object]:
     else:
         from qframelesswindow import FramelessWindow as Window
     return Window
+
+
+class SettingMessageBox(MessageBoxBase):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.titleLabel = SubtitleLabel('Host URL')
+        self.urlLineEdit = LineEdit()
+
+        self.urlLineEdit.setPlaceholderText("Enter the server's URL")
+        self.urlLineEdit.setClearButtonEnabled(True)
+
+        # Add components to the layout
+        self.viewLayout.addWidget(self.titleLabel)
+        self.viewLayout.addWidget(self.urlLineEdit)
+
+        # Set the minimum width of the dialog box
+        self.widget.setMinimumWidth(350)
 
 
 def createSuccessInfoBar(parent, title: str, content: str):

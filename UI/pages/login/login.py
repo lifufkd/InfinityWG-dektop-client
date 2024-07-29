@@ -5,9 +5,10 @@
 from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
-from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme
+from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme, FluentIcon
 from UI.pages.login.UI_login import Ui_Login
-from utilities.UI.utilities import isWin11, select_window, createWarningInfoBar, createSuccessInfoBar
+from utilities.UI.utilities import (isWin11, select_window, createWarningInfoBar,
+                                    createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
 ##########################
@@ -46,6 +47,8 @@ class LoginWindow(Window, Ui_Login):
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
         self.LoginpushButton.clicked.connect(self.login)
         self.RegistrationpushButton.clicked.connect(self.open_reg)
+        self.SettingsPushButton.clicked.connect(self.open_settings)
+        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
 
     def login(self):
         login = self.LoginlineEdit.text()
@@ -87,6 +90,12 @@ class LoginWindow(Window, Ui_Login):
 
     def open_reg(self):
         self.sw_open_reg.emit()
+
+    def open_settings(self):
+        w = SettingMessageBox(self)
+        w.urlLineEdit.setText(self._authorization.get_host_url())
+        if w.exec():
+            self._authorization.change_host_url(w.urlLineEdit.text())
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

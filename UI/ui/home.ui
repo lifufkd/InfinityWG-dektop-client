@@ -9,15 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>759</height>
+    <width>418</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
     <widget class="CardWidget" name="ConnectionCard">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -27,8 +27,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>380</width>
-       <height>410</height>
+       <width>400</width>
+       <height>250</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -74,7 +74,7 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="IconWidget" name="CountryIcon_2" native="true">
+           <widget class="IconWidget" name="CountryIcon" native="true">
             <property name="minimumSize">
              <size>
               <width>20</width>
@@ -107,7 +107,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="BodyLabel" name="hintLabel_3">
+           <widget class="BodyLabel" name="CurrentCountryText">
             <property name="font">
              <font>
               <family>Arial</family>
@@ -156,7 +156,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="TransparentToolButton" name="moreButton_3">
+           <widget class="TransparentToolButton" name="ChooseServerButton">
             <property name="font">
              <font>
               <family>Arial</family>
@@ -188,7 +188,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="BodyLabel" name="hintLabel_2">
+           <widget class="BodyLabel" name="CurrentIPText">
             <property name="font">
              <font>
               <family>Arial</family>
@@ -260,8 +260,8 @@
            <widget class="PrimaryPushButton" name="ConnectBtn">
             <property name="font">
              <font>
-              <family>Arial Black</family>
-              <pointsize>14</pointsize>
+              <family>HoloLens MDL2 Assets</family>
+              <pointsize>16</pointsize>
              </font>
             </property>
             <property name="text">
@@ -289,8 +289,8 @@
            <widget class="PrimaryPushButton" name="ChangeIpBtn">
             <property name="font">
              <font>
-              <family>Arial Black</family>
-              <pointsize>14</pointsize>
+              <family>HoloLens MDL2 Assets</family>
+              <pointsize>16</pointsize>
              </font>
             </property>
             <property name="text">

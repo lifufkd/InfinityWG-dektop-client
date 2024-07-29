@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1235</width>
-    <height>839</height>
+    <height>838</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -228,7 +228,7 @@
       <item>
        <widget class="LineEdit" name="FioLineEdit">
         <property name="echoMode">
-         <enum>QLineEdit::EchoMode::Password</enum>
+         <enum>QLineEdit::EchoMode::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>Alex Sure</string>
@@ -279,6 +279,16 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="TransparentToolButton" name="SettingsPushButton">
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -338,7 +348,7 @@
  </customwidgets>
  <resources>
   <include location="resource.qrc"/>
-  <include location="../../../../../.designer/backup/resource.qrc"/>
+  <include location="resource.qrc"/>
  </resources>
  <connections/>
 </ui>

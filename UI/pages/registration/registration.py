@@ -7,7 +7,8 @@ from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme, FluentIcon
 from UI.pages.registration.UI_registration import Ui_Registration
-from utilities.UI.utilities import isWin11, select_window, createSuccessInfoBar, createWarningInfoBar
+from utilities.UI.utilities import (isWin11, select_window, createWarningInfoBar,
+                                    createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
 ##########################
@@ -47,7 +48,9 @@ class RegistrationWindow(Window, Ui_Registration):
 
         self.RegisterpushButton.clicked.connect(self.registrate)
         self.LoginPushButton.clicked.connect(self.open_login)
+        self.SettingsPushButton.clicked.connect(self.open_settings)
         self.LoginPushButton.setIcon(FluentIcon.RETURN)
+        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
 
     def registrate(self):
         login = self.LoginlineEdit.text()
@@ -100,6 +103,12 @@ class RegistrationWindow(Window, Ui_Registration):
 
     def open_login(self):
         self.sw_open_login.emit()
+
+    def open_settings(self):
+        w = SettingMessageBox(self)
+        w.urlLineEdit.setText(self._authorization.get_host_url())
+        if w.exec():
+            self._authorization.change_host_url(w.urlLineEdit.text())
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

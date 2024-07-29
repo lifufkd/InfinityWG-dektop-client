@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'registerNskWar.ui'
+## Form generated from reading UI file 'registerHUdiEY.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -153,6 +153,12 @@ class Ui_Registration(object):
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer_2)
+
+        self.SettingsPushButton = TransparentToolButton(self.widget)
+        self.SettingsPushButton.setObjectName(u"SettingsPushButton")
+        self.SettingsPushButton.setIconSize(QSize(25, 25))
+
+        self.verticalLayout.addWidget(self.SettingsPushButton)
 
 
         self.horizontalLayout.addWidget(self.widget)
