@@ -5,6 +5,7 @@
 import requests
 from typing import Optional
 from utilities.config import Config
+from utilities.network import process_request
 ##########################
 
 ##########################
@@ -13,7 +14,7 @@ from utilities.config import Config
 class Authorization:
     def __init__(self, config: Config):
         super().__init__()
-        self._token = config.get(config.token)
+        self.token = config.get(config.token)
         self._config = config
 
     def get_host_url(self):
@@ -26,16 +27,13 @@ class Authorization:
         host_url = self.get_host_url()
         request_url = host_url + "/users/check/token"
         headers = {
-            "Authorization": f"Bearer {self._token}"
+            "Authorization": f"Bearer {self.token}"
         }
         try:
             response = requests.get(request_url, headers=headers)
         except Exception as e:
             return {"status": False, "detail": e}
-        if response.status_code == 200:
-            return {"status": True, **response.json()}
-        else:
-            return {"status": False, **response.json()}
+        return process_request(response=response)
 
     def login(self, login: str, password: str, remember_me: bool) -> Optional[dict]:
         host_url = self.get_host_url()
@@ -49,9 +47,9 @@ class Authorization:
         except Exception as e:
             return {"status": False, "detail": e}
         if response.status_code == 200:
-            self._token = response.json()['access_token']
+            self.token = response.json()['access_token']
             if remember_me:
-                self._config.set(self._config.token, self._token)
+                self._config.set(self._config.token, self.token)
             return {"status": True, **response.json()}
         else:
             return {"status": False, **response.json()}
@@ -68,19 +66,32 @@ class Authorization:
             response = requests.post(request_url, json=data)
         except Exception as e:
             return {"status": False, "detail": e}
-        if response.status_code == 200:
-            return {"status": True, **response.json()}
-        else:
-            return {"status": False, **response.json()}
+        return process_request(response=response)
 
 
 class VPN:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, authorization: Authorization):
         super().__init__()
         self._config = config
+        self._authorization = authorization
 
-    def set_country(self, country: str) -> None:
+    def set_country_config(self, country: str) -> None:
         self._config.set(self._config.country, country)
 
-    def get_country(self) -> str:
+    def get_country_config(self) -> str:
         return self._config.get(self._config.country)
+
+    def get_country_server(self) -> Optional[dict]:
+        host_url = self._authorization.get_host_url()
+        request_url = host_url + "/get/countries"
+        headers = {
+            "Authorization": f"Bearer {self._authorization.token}"
+        }
+        try:
+            response = requests.get(request_url, headers=headers)
+        except Exception as e:
+            return {"status": False, "detail": e}
+        if response.status_code == 200:
+            return {"status": True, "data": response.json()}
+        else:
+            return {"status": False, **response.json()}

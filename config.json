@@ -1,7 +1,13 @@
 {
+    "VPN": {
+        "country": "United States"
+    },
     "System": {
-        "token": "",
-        "host": "http://localhost:8000"
-
+        "host": "http://127.0.0.1:8000",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3OCIsImV4cCI6MTcyMjM3NjQ0OH0.xgoRS77-l2Clgt42zBtVfMDOwpi-Um9RKoa-hFVcsXc"
+    },
+    "QFluentWidgets": {
+        "ThemeColor": "#ff009faa",
+        "ThemeMode": "Auto"
     }
 }

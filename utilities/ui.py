@@ -44,46 +44,6 @@ class SettingMessageBox(MessageBoxBase):
         self.widget.setMinimumWidth(350)
 
 
-class SelectCountryMessageBox(MessageBoxBase):
-
-    def __init__(self, vpn: VPN, parent=None):
-        super().__init__(parent)
-        self.titleLabel = SubtitleLabel('Select country')
-        self.country_combo_box = ComboBox()
-        self.populateComboBox()
-        self.setDefaultValue(vpn.get_country())
-
-        # Add components to the layout
-        self.viewLayout.addWidget(self.titleLabel)
-        self.viewLayout.addWidget(self.country_combo_box)
-
-        # Set the minimum width of the dialog box
-        self.widget.setMinimumWidth(350)
-
-    def populateComboBox(self):
-        countries = [
-            ("United States.ico", "United States"),
-            ("Canada.ico", "Canada"),
-            ("United Kingdom.ico", "United Kingdom"),
-            ("Australia.ico", "Australia"),
-            ("Germany.ico", "Germany"),
-            # Add more countries as needed
-        ]
-        countries.append(
-            ("Unknown.ico", "Auto")
-        )
-        for icon_path, name in countries:
-            self.country_combo_box.addItem(icon=f"resources/country_flags/{icon_path}", text=name)
-
-    def setDefaultValue(self, country: str = "Auto"):
-        index = self.country_combo_box.findText(country)
-        if index != -1:
-            self.country_combo_box.setCurrentIndex(index)
-            return True
-        index = self.country_combo_box.findText("Auto")
-        self.country_combo_box.setCurrentIndex(index)
-
-
 def createSuccessInfoBar(parent, title: str, content: str):
     InfoBar.success(
         title=title,
@@ -120,3 +80,43 @@ def createInfoInfoBar(parent, title: str, content: str):
         duration=5000,
         parent=parent
     )
+
+
+class SelectCountryMessageBox(MessageBoxBase):
+
+    def __init__(self, vpn: VPN, parent=None):
+        super().__init__(parent)
+        self.titleLabel = SubtitleLabel('Select country')
+        self.country_combo_box = ComboBox()
+        self._vpn = vpn
+        self.populateComboBox()
+        self.setDefaultValue(vpn.get_country_config())
+
+        # Add components to the layout
+        self.viewLayout.addWidget(self.titleLabel)
+        self.viewLayout.addWidget(self.country_combo_box)
+
+        # Set the minimum width of the dialog box
+        self.widget.setMinimumWidth(350)
+
+    def populateComboBox(self):
+        countries = list()
+        data = self._vpn.get_country_server()
+        if data["status"]:
+            for country in data["data"].keys():
+                countries.append((data["data"][country]["name"], data["data"][country]["name"]))
+        else:
+            createWarningInfoBar(title="Error", content=data["detail"], parent=self)
+        countries.append(
+            ("Unknown", "Auto")
+        )
+        for icon_path, name in countries:
+            self.country_combo_box.addItem(icon=f"resources/country_flags/{icon_path}.ico", text=name)
+
+    def setDefaultValue(self, country: str = "Auto"):
+        index = self.country_combo_box.findText(country)
+        if index != -1:
+            self.country_combo_box.setCurrentIndex(index)
+            return True
+        index = self.country_combo_box.findText("Auto")
+        self.country_combo_box.setCurrentIndex(index)

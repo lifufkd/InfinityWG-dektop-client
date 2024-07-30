@@ -30,3 +30,10 @@ def get_country_by_ip():
             return "-"
     except Exception as e:
         return "-"
+
+
+def process_request(response):
+    if response.status_code == 200:
+        return {"status": True, **response.json()}
+    else:
+        return {"status": False, **response.json()}
