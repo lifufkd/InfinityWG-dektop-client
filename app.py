@@ -9,7 +9,8 @@ from qfluentwidgets import FluentTranslator
 from PySide6.QtCore import QLocale
 
 from utilities.config import Config
-from API.Requests import Authorization
+from utilities.schedule import TaskScheduler
+from API.Requests import Authorization, VPN
 from UI.main import App
 ##########################
 
@@ -19,12 +20,17 @@ from UI.main import App
 def start_gui() -> None:
     app = QApplication(sys.argv)
     app.installTranslator(FluentTranslator(QLocale()))  # TODO: Change to config load method
-    window = App(authorization, authorization.check_token()["status"])
+    window = App(authorization=authorization,
+                 scheduler=scheduler,
+                 vpn=vpn,
+                 token_status=authorization.check_token()["status"])
     app.exec()
 
 
 if __name__ == '__main__':
     config = Config()
     authorization = Authorization(config)
+    vpn = VPN(config)
+    scheduler = TaskScheduler()
     start_gui()
     

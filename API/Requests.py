@@ -72,3 +72,15 @@ class Authorization:
             return {"status": True, **response.json()}
         else:
             return {"status": False, **response.json()}
+
+
+class VPN:
+    def __init__(self, config: Config):
+        super().__init__()
+        self._config = config
+
+    def set_country(self, country: str) -> None:
+        self._config.set(self._config.country, country)
+
+    def get_country(self) -> str:
+        return self._config.get(self._config.country)

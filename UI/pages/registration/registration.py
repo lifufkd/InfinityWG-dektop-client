@@ -7,8 +7,8 @@ from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme, FluentIcon
 from UI.pages.registration.UI_registration import Ui_Registration
-from utilities.UI.utilities import (isWin11, select_window, createWarningInfoBar,
-                                    createSuccessInfoBar, SettingMessageBox)
+from utilities.ui import (isWin11, select_window, createWarningInfoBar,
+                          createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
 ##########################
@@ -102,6 +102,10 @@ class RegistrationWindow(Window, Ui_Registration):
         self.sw_open_app.emit()
 
     def open_login(self):
+        self.LoginlineEdit.setText("")
+        self.PasswordlineEdit.setText("")
+        self.RepeatPasswordlineEdit.setText("")
+        self.FioLineEdit.setText("")
         self.sw_open_login.emit()
 
     def open_settings(self):

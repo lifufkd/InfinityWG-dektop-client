@@ -1,5 +1,11 @@
-# coding:utf-8
-from qfluentwidgets import (qconfig, QConfig, ConfigItem)
+##########################
+#       Created By       #
+#          SBR           #
+##########################
+from qfluentwidgets import qconfig, QConfig, ConfigItem
+##########################
+
+##########################
 
 
 class Config(QConfig):
@@ -11,6 +17,10 @@ class Config(QConfig):
 
     host = ConfigItem(
         "System", "host", "http://localhost:8000"
+    )
+
+    country = ConfigItem(
+        "VPN", "country", "Auto"
     )
 
     def __init__(self):

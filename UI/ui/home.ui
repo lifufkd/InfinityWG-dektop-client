@@ -74,6 +74,19 @@
            <number>5</number>
           </property>
           <item>
+           <spacer name="HorizontalSpacerSelectCOuntry_5">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="IconWidget" name="CountryIcon" native="true">
             <property name="minimumSize">
              <size>
@@ -92,19 +105,6 @@
               <normaloff>:/images/alarms.png</normaloff>:/images/alarms.png</iconset>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="HorizontalSpacerSelectCOuntry_5">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
           <item>
            <widget class="BodyLabel" name="CurrentCountryText">
@@ -143,6 +143,18 @@
            </widget>
           </item>
           <item>
+           <widget class="TransparentToolButton" name="ChooseServerButton">
+            <property name="font">
+             <font>
+              <family>Arial</family>
+              <pointsize>20</pointsize>
+              <italic>false</italic>
+              <kerning>true</kerning>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="HorizontalSpacerSelectCOuntry_6">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -154,18 +166,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <widget class="TransparentToolButton" name="ChooseServerButton">
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <pointsize>20</pointsize>
-              <italic>false</italic>
-              <kerning>true</kerning>
-             </font>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
@@ -196,7 +196,7 @@
              </font>
             </property>
             <property name="text">
-             <string>78.104.156.123</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -265,25 +265,12 @@
              </font>
             </property>
             <property name="text">
-             <string>Loading...</string>
+             <string>Connect</string>
             </property>
             <property name="autoDefault">
              <bool>true</bool>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="HorizontalSpacerSelectCOuntry_7">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
           <item>
            <widget class="PrimaryPushButton" name="ChangeIpBtn">
@@ -294,7 +281,7 @@
              </font>
             </property>
             <property name="text">
-             <string>change ip</string>
+             <string>Change IP</string>
             </property>
             <property name="autoDefault">
              <bool>true</bool>

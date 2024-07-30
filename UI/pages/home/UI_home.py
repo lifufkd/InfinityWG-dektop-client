@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'homeuRPSZV.ui'
+## Form generated from reading UI file 'homeneyOdS.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -56,6 +56,10 @@ class Ui_Home(object):
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(5, -1, -1, -1)
+        self.HorizontalSpacerSelectCOuntry_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_5)
+
         self.CountryIcon = IconWidget(self.ConnectionCard)
         self.CountryIcon.setObjectName(u"CountryIcon")
         self.CountryIcon.setMinimumSize(QSize(20, 20))
@@ -65,10 +69,6 @@ class Ui_Home(object):
         self.CountryIcon.setProperty("icon", icon)
 
         self.horizontalLayout_2.addWidget(self.CountryIcon)
-
-        self.HorizontalSpacerSelectCOuntry_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_5)
 
         self.CurrentCountryText = BodyLabel(self.ConnectionCard)
         self.CurrentCountryText.setObjectName(u"CurrentCountryText")
@@ -81,10 +81,6 @@ class Ui_Home(object):
 
         self.horizontalLayout_2.addWidget(self.CurrentCountryText)
 
-        self.HorizontalSpacerSelectCOuntry_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_6)
-
         self.ChooseServerButton = TransparentToolButton(self.ConnectionCard)
         self.ChooseServerButton.setObjectName(u"ChooseServerButton")
         font1 = QFont()
@@ -95,6 +91,10 @@ class Ui_Home(object):
         self.ChooseServerButton.setFont(font1)
 
         self.horizontalLayout_2.addWidget(self.ChooseServerButton)
+
+        self.HorizontalSpacerSelectCOuntry_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.HorizontalSpacerSelectCOuntry_6)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -141,10 +141,6 @@ class Ui_Home(object):
 
         self.horizontalLayout_3.addWidget(self.ConnectBtn)
 
-        self.HorizontalSpacerSelectCOuntry_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.HorizontalSpacerSelectCOuntry_7)
-
         self.ChangeIpBtn = PrimaryPushButton(self.ConnectionCard)
         self.ChangeIpBtn.setObjectName(u"ChangeIpBtn")
         self.ChangeIpBtn.setFont(font2)
@@ -178,8 +174,8 @@ class Ui_Home(object):
     def retranslateUi(self, Home):
         Home.setWindowTitle(QCoreApplication.translate("Home", u"Form", None))
         self.CurrentCountryText.setText(QCoreApplication.translate("Home", u"Russia", None))
-        self.CurrentIPText.setText(QCoreApplication.translate("Home", u"78.104.156.123", None))
-        self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Loading...", None))
-        self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"change ip", None))
+        self.CurrentIPText.setText(QCoreApplication.translate("Home", u"", None))
+        self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Connect", None))
+        self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"Change IP", None))
     # retranslateUi
 

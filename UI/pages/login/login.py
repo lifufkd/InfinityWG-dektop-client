@@ -7,8 +7,8 @@ from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme, FluentIcon
 from UI.pages.login.UI_login import Ui_Login
-from utilities.UI.utilities import (isWin11, select_window, createWarningInfoBar,
-                                    createSuccessInfoBar, SettingMessageBox)
+from utilities.ui import (isWin11, select_window, createWarningInfoBar,
+                          createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
 ##########################
@@ -86,6 +86,8 @@ class LoginWindow(Window, Ui_Login):
         return True
 
     def open_app(self):
+        self.LoginlineEdit.setText("")
+        self.PasswordlineEdit.setText("")
         self.sw_open_app.emit()
 
     def open_reg(self):
