@@ -32,8 +32,16 @@ def get_country_by_ip():
         return "-"
 
 
+def json_error_handler(response):
+    try:
+        answer = {"status": False, **response.json()}
+    except Exception as e:
+        answer = {"status": False, "detail": f"Server Error: {response.status_code}"}
+    return answer
+
+
 def process_request(response):
     if response.status_code == 200:
         return {"status": True, **response.json()}
     else:
-        return {"status": False, **response.json()}
+        return json_error_handler(response)

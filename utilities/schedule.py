@@ -2,9 +2,8 @@
 #       Created By       #
 #          SBR           #
 ##########################
-import time
-
-from PySide6.QtCore import QTimer, QThread, QObject, Signal
+from PySide6.QtCore import QTimer, QThread, QObject, Signal, QDateTime
+from functools import partial
 ##########################
 
 ##########################
@@ -17,46 +16,67 @@ class TaskRunner(QObject):
         super().__init__()
         self.task = task
         self.interval = interval
+        self.timer = None
 
     def run(self):
-        if self.interval:
-            while True:
-                self.task()
-                time.sleep(self.interval/1000)
+        self.task(self.stop)
+        if self.interval is not None:
+            self.timer = QTimer()
+            self.timer.timeout.connect(partial(self.task, self.stop))
+            self.timer.start(self.interval)
         else:
-            self.task()
+            self.stop()
+
+    def stop(self):
+        if self.timer:
+            self.timer.stop()
+        self.finished.emit()
 
 
 class TaskScheduler:
     def __init__(self):
         self.tasks = {}
 
-    def add_task(self, task_name, task, interval=None):
+    def add_task(self, task_name, task, start_time=None, interval=None):
         """
         Add a new task to the scheduler.
 
         Parameters:
             task_name (str): Unique name for the task.
             task (function): The task function to be executed.
+            start_time (QDateTime): The start time of the task. If None, execute immediately.
             interval (int): The interval in milliseconds at which the task should repeat. If None, the task runs only once.
         """
         if task_name in self.tasks:
             raise ValueError("Task with this name already exists.")
 
+        if start_time is None:
+            start_time = QDateTime.currentDateTime()
+
+        delay = max(0, int(start_time.toMSecsSinceEpoch() - QDateTime.currentMSecsSinceEpoch()))
+
         thread = QThread()
         runner = TaskRunner(task, interval)
         runner.moveToThread(thread)
 
+        runner.finished.connect(partial(self.remove_task, task_name))
         runner.finished.connect(thread.quit)
         runner.finished.connect(runner.deleteLater)
         thread.finished.connect(thread.deleteLater)
 
         thread.started.connect(runner.run)
-        thread.start()
 
-        self.tasks[task_name] = (thread, runner)
+        if delay > 0:
+            timer = QTimer()
+            timer.setSingleShot(True)
+            timer.timeout.connect(thread.start)
+            timer.start(delay)
+            self.tasks[task_name] = (thread, runner, timer)
+        else:
+            thread.start()
+            self.tasks[task_name] = (thread, runner)
 
-    def stop_task(self, task_name):
+    def remove_task(self, task_name):
         """
         Remove a task from the scheduler.
 
@@ -64,6 +84,14 @@ class TaskScheduler:
             task_name (str): The name of the task to remove.
         """
         if task_name in self.tasks:
-            thread, runner = self.tasks.pop(task_name)
-            thread.quit()
-            thread.wait()
+            task_info = self.tasks.pop(task_name)
+            thread, runner = task_info[0], task_info[1]
+            if runner.timer:
+                runner.timer.stop()
+            if thread.isRunning():
+                thread.quit()
+                thread.wait()
+            if len(task_info) > 2:
+                task_info[2].stop()
+        else:
+            raise ValueError("Task with this name does not exist.")

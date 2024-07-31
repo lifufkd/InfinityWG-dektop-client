@@ -3,7 +3,8 @@
 #          SBR           #
 ##########################
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import NavigationItemPosition, SplitFluentWindow, FluentIcon as FIF, Dialog
 
 from UI.pages.login.login import LoginWindow
@@ -54,10 +55,12 @@ class Main(SplitFluentWindow):
     def closeEvent(self, event):
         w = Dialog("Exit", "Are you sure you want to close the program?", self)
         if w.exec() and self.HomeInterface.connected:
-            self._wireguard.disconnect()
+            self.HomeInterface.connect_wg()
 
 
-class App:
+class App(QWidget):
+    thread_handler_signal = Signal(object)
+
     def __init__(self,
                  authorization: Authorization,
                  scheduler: TaskScheduler,
@@ -65,8 +68,10 @@ class App:
                  wireguard: WireGuard,
                  vpn: VPN):
         super().__init__()
+
         # TODO: Make sure that when the program starts, the window loads in
         #  accordance with the received token status for security
+
         self._scheduler = scheduler
         self._vpn = vpn
         self._wireguard = wireguard
@@ -75,34 +80,41 @@ class App:
         self._login_window = None
         self._reg_window = None
         self._main = None
-        self._stop_check_token = False
-        self._token_started = False
+
         self.init()
 
     def init(self):
-        self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
-        self._login_window = LoginWindow(self._authorization)
-        self._reg_window = RegistrationWindow(self._authorization)
-
-        # Connect the signal to the slot
-        self._login_window.sw_open_app.connect(self.show_app)
-        self._login_window.sw_open_reg.connect(self.open_reg)
-
-        self._reg_window.sw_open_app.connect(self.show_app)
-        self._reg_window.sw_open_login.connect(self.open_login)
+        self.thread_handler_signal.connect(self.thread_handler)
         if not self._token_status:
+            self.load_login()
+            self.load_reg()
             self._login_window.show()
         else:
-            self._scheduler.add_task("token_check", self.check_token, 5000)
-            self._token_started = True
+            self.load_app()
+            self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
             self._main.show()
 
+    def load_login(self):
+        if self._login_window is None:
+            self._login_window = LoginWindow(self._authorization)
+            self._login_window.sw_open_app.connect(self.show_app)
+            self._login_window.sw_open_reg.connect(self.open_reg)
+
+    def load_reg(self):
+        if self._reg_window is None:
+            self._reg_window = RegistrationWindow(self._authorization)
+            self._reg_window.sw_open_app.connect(self.show_app)
+            self._reg_window.sw_open_login.connect(self.open_login)
+
+    def load_app(self):
+        if self._main is None:
+            self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
+
     def show_app(self):
+        self.load_app()
         self._main.resize(1280, 720)
+        self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
         self._main.show()
-        if not self._stop_check_token:
-            self._token_started = True
-            self._scheduler.add_task("token_check", self.check_token, 5000)
         self._login_window.hide()
         self._reg_window.hide()
 
@@ -116,13 +128,19 @@ class App:
         self._login_window.show()
         self._reg_window.hide()
 
-    def check_token(self):
-        if not self._stop_check_token:
-            status = self._authorization.check_token()["status"]
-            if not status:
-                self.open_login()
-                self._main.hide()
-                self._wireguard.disconnect()
-                self._stop_check_token = True
+    @staticmethod
+    def thread_handler(action):
+        action()
+
+    def check_token(self, stop_callback):
+        status = self._authorization.check_token()["status"]
+        if not status:
+            self.thread_handler_signal.emit(self.load_login)
+            self.thread_handler_signal.emit(self.load_reg)
+            self.thread_handler_signal.emit(self.open_login)
+            self.thread_handler_signal.emit(self._main.hide)
+            if self._main.HomeInterface.connected:
+                self.thread_handler_signal.emit(self._main.HomeInterface.connect_wg)
+            stop_callback()
 
 

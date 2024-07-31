@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt
 from API.Requests import VPN
 from qfluentwidgets import (InfoBar, InfoBarPosition, InfoBarIcon,
                             MessageBoxBase, SubtitleLabel, LineEdit, ComboBox)
+from utilities.system import send_notification
 ##########################
 
 ##########################
@@ -120,3 +121,13 @@ class SelectCountryMessageBox(MessageBoxBase):
             return True
         index = self.country_combo_box.findText("Auto")
         self.country_combo_box.setCurrentIndex(index)
+
+
+def wg_status_notify(parent: object, connect_status: bool):
+    if not connect_status:
+        notification_text = "WireGuard tunnel successfully disconnected"
+    else:
+        notification_text = "WireGuard tunnel successfully connected"
+    notify = send_notification(title="InfinityWG", text=notification_text)
+    if not notify["status"]:
+        createWarningInfoBar(title="Error", content=notify["detail"], parent=parent)

@@ -5,7 +5,7 @@
 import requests
 from typing import Optional
 from utilities.config import Config
-from utilities.network import process_request
+from utilities.network import process_request, json_error_handler
 ##########################
 
 ##########################
@@ -52,7 +52,7 @@ class Authorization:
                 self._config.set(self._config.token, self.token)
             return {"status": True, **response.json()}
         else:
-            return {"status": False, **response.json()}
+            return json_error_handler(response)
 
     def registration(self, login: str, password: str, full_name=None) -> Optional[dict]:
         host_url = self.get_host_url()
@@ -94,4 +94,4 @@ class VPN:
         if response.status_code == 200:
             return {"status": True, "data": response.json()}
         else:
-            return {"status": False, **response.json()}
+            return json_error_handler(response)
