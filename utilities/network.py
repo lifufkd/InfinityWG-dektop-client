@@ -12,25 +12,25 @@ import requests
 
 def get_ip_address():
     try:
-        response = requests.get('https://api.ipify.org?format=json')
+        response = requests.get('https://api.ipify.org?format=json', timeout=1)
         response.raise_for_status()
         ip_address = response.json()['ip']
+        return {"status": True, "detail": None, "data": ip_address}
     except requests.RequestException as e:
-        ip_address = 'No internet connection'
-    return ip_address
+        return {"status": False, "detail": str(e)}
 
 
 def get_country_by_ip():
     try:
-        response = requests.get('https://ipapi.co/json/')
+        response = requests.get('https://ipapi.co/json/', timeout=5)
         data = response.json()
         country = data.get('country_name')
         if country:
-            return country
+            return {"status": True, "detail": None, "data": country}
         else:
-            return "-"
+            raise Exception('No internet connection')
     except Exception as e:
-        return "-"
+        return {"status": False, "detail": str(e)}
 
 
 def json_error_handler(response):

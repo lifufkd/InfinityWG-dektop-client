@@ -52,7 +52,6 @@ def createSuccessInfoBar(parent, title: str, content: str):
         orient=Qt.Horizontal,
         isClosable=True,
         position=InfoBarPosition.TOP_RIGHT,
-        # position='Custom',   # NOTE: use custom info bar manager
         duration=2000,
         parent=parent
     )
@@ -63,7 +62,7 @@ def createWarningInfoBar(parent, title: str, content: str):
         title=title,
         content=content,
         orient=Qt.Horizontal,
-        isClosable=False,  # disable close button
+        isClosable=False,
         position=InfoBarPosition.TOP_RIGHT,
         duration=5000,
         parent=parent
@@ -75,7 +74,7 @@ def createInfoInfoBar(parent, title: str, content: str):
         icon=InfoBarIcon.INFORMATION,
         title=title,
         content=content,
-        orient=Qt.Vertical,  # vertical layout
+        orient=Qt.Vertical,
         isClosable=True,
         position=InfoBarPosition.TOP_RIGHT,
         duration=5000,
@@ -131,3 +130,7 @@ def wg_status_notify(parent: object, connect_status: bool):
     notify = send_notification(title="InfinityWG", text=notification_text)
     if not notify["status"]:
         createWarningInfoBar(title="Error", content=notify["detail"], parent=parent)
+
+
+def thread_handler(action):
+    action()

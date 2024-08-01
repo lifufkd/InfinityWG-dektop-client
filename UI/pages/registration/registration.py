@@ -20,7 +20,6 @@ Window = select_window()
 
 
 class RegistrationWindow(Window, Ui_Registration):
-    sw_open_app = Signal()
     sw_open_login = Signal()
 
     def __init__(self, authorization: Authorization):
@@ -47,7 +46,7 @@ class RegistrationWindow(Window, Ui_Registration):
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
 
         self.RegisterpushButton.clicked.connect(self.registrate)
-        self.LoginPushButton.clicked.connect(self.open_login)
+        self.LoginPushButton.clicked.connect(lambda: self.sw_open_login.emit())
         self.SettingsPushButton.clicked.connect(self.open_settings)
         self.LoginPushButton.setIcon(FluentIcon.RETURN)
         self.SettingsPushButton.setIcon(FluentIcon.SETTING)
@@ -64,7 +63,7 @@ class RegistrationWindow(Window, Ui_Registration):
                 content="login and password cannot be empty",
             )
             return False
-        elif len(login) < 8 or len(password) < 8 or len(full_name) < 8:
+        elif len(password) < 8:
             createWarningInfoBar(
                 parent=self,
                 title="Error",
@@ -95,13 +94,10 @@ class RegistrationWindow(Window, Ui_Registration):
             title="Success",
             content=str(auth_response["detail"])
         )
-        QTimer.singleShot(2000, self.open_app)
+        QTimer.singleShot(2000, self.open_login_registrated)
         return True
 
-    def open_app(self):
-        self.sw_open_app.emit()
-
-    def open_login(self):
+    def open_login_registrated(self):
         self.LoginlineEdit.setText("")
         self.PasswordlineEdit.setText("")
         self.RepeatPasswordlineEdit.setText("")

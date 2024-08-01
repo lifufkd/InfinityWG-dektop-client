@@ -15,7 +15,6 @@ from utilities.system import check_best_vpn_server
 class Authorization:
     def __init__(self, config: Config):
         super().__init__()
-        self.token = config.get(config.token)
         self._config = config
 
     def get_host_url(self):
@@ -24,11 +23,17 @@ class Authorization:
     def change_host_url(self, host_url):
         self._config.set(self._config.host, host_url)
 
+    def get_token(self):
+        return self._config.get(self._config.token)
+
+    def change_token(self, token):
+        self._config.set(self._config.token, token)
+
     def check_token(self) -> Optional[dict]:
         host_url = self.get_host_url()
         request_url = host_url + "/users/check/token"
         headers = {
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.get_token()}"
         }
         try:
             response = requests.get(request_url, headers=headers)
@@ -48,9 +53,9 @@ class Authorization:
         except Exception as e:
             return {"status": False, "detail": e}
         if response.status_code == 200:
-            self.token = response.json()['access_token']
+            token = response.json()['access_token']
             if remember_me:
-                self._config.set(self._config.token, self.token)
+                self.change_token(token)
             return {"status": True, **response.json()}
         else:
             return json_error_handler(response)
@@ -86,7 +91,7 @@ class VPN:
     def get_countries(self) -> Optional[dict]:
         request_url = self._host_url + "/get/countries"
         headers = {
-            "Authorization": f"Bearer {self._authorization.token}"
+            "Authorization": f"Bearer {self._authorization.get_token()}"
         }
         try:
             response = requests.get(request_url, headers=headers)
@@ -100,10 +105,13 @@ class VPN:
     def update_ip_address(self) -> dict:
         request_url = self._host_url + "/update/ip"
         headers = {
-            "Authorization": f"Bearer {self._authorization.token}"
+            "Authorization": f"Bearer {self._authorization.get_token()}"
         }
+        ip_address = get_ip_address()
+        if not ip_address["status"]:
+            return {"status": False, "detail": ip_address["detail"]}
         data = {
-            "ip": get_ip_address()
+            "ip": ip_address["data"]
         }
         try:
             response = requests.post(request_url, headers=headers, json=data)
@@ -117,7 +125,7 @@ class VPN:
     def update_best_vpn_address(self):
         request_url = self._host_url + "/update/best_vpn_address"
         headers = {
-            "Authorization": f"Bearer {self._authorization.token}"
+            "Authorization": f"Bearer {self._authorization.get_token()}"
         }
         data = {
             "host": check_best_vpn_server(self.get_countries())
@@ -134,7 +142,7 @@ class VPN:
     def update_best_vpn_countries(self):
         request_url = self._host_url + "/update/best_vpn_countries"
         headers = {
-            "Authorization": f"Bearer {self._authorization.token}"
+            "Authorization": f"Bearer {self._authorization.get_token()}"
         }
         data = {
             "countries": check_best_vpn_server(self.get_countries(), mode=True)
@@ -151,7 +159,7 @@ class VPN:
     def get_wg_config(self, country: str | None = None) -> Optional[dict]:
         request_url = self._host_url + "/get/config"
         headers = {
-            "Authorization": f"Bearer {self._authorization.token}"
+            "Authorization": f"Bearer {self._authorization.get_token()}"
         }
         data = {
             "country": country

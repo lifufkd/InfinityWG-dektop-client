@@ -173,7 +173,7 @@ class Ui_Home(object):
 
     def retranslateUi(self, Home):
         Home.setWindowTitle(QCoreApplication.translate("Home", u"Form", None))
-        self.CurrentCountryText.setText(QCoreApplication.translate("Home", u"Russia", None))
+        self.CurrentCountryText.setText(QCoreApplication.translate("Home", u"", None))
         self.CurrentIPText.setText(QCoreApplication.translate("Home", u"", None))
         self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Connect", None))
         self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"Change IP", None))
