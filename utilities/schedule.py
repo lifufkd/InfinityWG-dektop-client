@@ -48,7 +48,7 @@ class TaskScheduler:
             interval (int): The interval in milliseconds at which the task should repeat. If None, the task runs only once.
         """
         if task_name in self.tasks:
-            raise ValueError("Task with this name already exists.")
+            self.remove_task(task_name=task_name)
 
         if start_time is None:
             start_time = QDateTime.currentDateTime()
@@ -86,12 +86,15 @@ class TaskScheduler:
         if task_name in self.tasks:
             task_info = self.tasks.pop(task_name)
             thread, runner = task_info[0], task_info[1]
-            if runner.timer:
-                runner.timer.stop()
-            if thread.isRunning():
-                thread.quit()
-                thread.wait()
-            if len(task_info) > 2:
-                task_info[2].stop()
+            try:
+                if runner.timer:
+                    runner.timer.stop()
+                if thread.isRunning():
+                    thread.quit()
+                    thread.wait()
+                if len(task_info) > 2:
+                    task_info[2].stop()
+            except Exception as e:
+                return False
         else:
-            raise ValueError("Task with this name does not exist.")
+            return False

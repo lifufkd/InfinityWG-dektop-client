@@ -108,6 +108,7 @@ class App(QWidget):
 
     def load_app(self):
         if self._main is None:
+            self._vpn.update_ip_address()
             self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
 
     def show_app(self):

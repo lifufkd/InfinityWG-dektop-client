@@ -102,7 +102,7 @@ class SelectCountryMessageBox(MessageBoxBase):
 
     def populateComboBox(self):
         countries = list()
-        data = self._vpn.get_country_server()
+        data = self._vpn.get_countries()
         if data["status"]:
             for country in data["data"].keys():
                 countries.append((data["data"][country]["name"], data["data"][country]["name"]))

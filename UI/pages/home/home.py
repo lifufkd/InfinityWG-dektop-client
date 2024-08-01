@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QWidget
 from qfluentwidgets import FluentIcon
 from UI.pages.home.UI_home import Ui_Home
 from utilities.network import get_ip_address, get_country_by_ip
-from utilities.ui import SelectCountryMessageBox
+from utilities.ui import SelectCountryMessageBox, createWarningInfoBar
 from API.Requests import VPN
 from utilities.schedule import TaskScheduler
 from utilities.wireguard import WireGuard
@@ -33,11 +33,12 @@ class Home(Ui_Home, QWidget):
 
         self.ChooseServerButton.clicked.connect(self.select_country)
         self.ConnectBtn.clicked.connect(self.connect_wg)
+        self.ChangeIpBtn.clicked.connect(self.new_connection_wg)
 
         self.update_country_and_ip()
 
-    def new_connection_wg(self, config: str):
-        self._wireguard.connect()
+    def new_connection_wg(self):
+        self._scheduler.add_task(task_name="wg_update_config", task=self._new_connection_wg)
 
     def connect_wg(self):
         self._scheduler.add_task(task_name="wg_connector", task=self._connect_wg)
@@ -68,9 +69,37 @@ class Home(Ui_Home, QWidget):
         else:
             self.CountryIcon.setIcon(None)
 
+    def _new_connection_wg(self, stop_callback):
+        while True:
+            status = self._vpn.get_wg_config(country=self._vpn.get_country_config())
+            if "data" not in status:
+                createWarningInfoBar(title="Error",
+                                     content=f"Error getting config ({status['detail']})",
+                                     parent=self)
+                return False
+            elif not status["status"]:
+                methods = [self._vpn.update_best_vpn_address, self._vpn.update_best_vpn_countries]
+                if status["data"]["code"] in range(2):
+                    _status = methods[status["data"]["code"]]()
+                    if not _status["status"]:
+                        createWarningInfoBar(title="Error",
+                                             content=f"Error getting config",
+                                             parent=self)
+                        return False
+                    continue
+                else:
+                    createWarningInfoBar(title="Error",
+                                         content=f"Error getting config",
+                                         parent=self)
+                    return False
+            else:
+                if self.connected:
+                    self._connect_wg(None)
+                self._wireguard.connect(config=status["data"]["config"])
+
     def select_country(self):
         w = SelectCountryMessageBox(vpn=self._vpn, parent=self)
         if w.exec():
             selected_country = w.country_combo_box.currentText()
             self._vpn.set_country_config(selected_country)
-            self.update_country_and_ip()
+            self.new_connection_wg()

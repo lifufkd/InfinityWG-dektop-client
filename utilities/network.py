@@ -2,7 +2,8 @@
 #       Created By       #
 #          SBR           #
 ##########################
-import socket
+import time
+from ping3 import ping
 import requests
 ##########################
 
@@ -45,3 +46,23 @@ def process_request(response):
         return {"status": True, **response.json()}
     else:
         return json_error_handler(response)
+
+
+def check_ping(domain, duration):
+    start_time = time.time()
+    pings = []
+
+    while time.time() - start_time < duration:
+        ping_time = ping(domain)
+        if ping_time is not None:
+            pings.append(ping_time * 1000)  # Конвертируем секунды в миллисекунды
+
+        # Sleep for a short time before the next ping
+        time.sleep(1)
+
+    # Calculate the average ping time
+    if pings:
+        average_ping = sum(pings) / len(pings)
+        return average_ping
+    else:
+        return None
