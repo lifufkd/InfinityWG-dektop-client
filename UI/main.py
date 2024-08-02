@@ -71,8 +71,8 @@ class Main(SplitFluentWindow):
             self._scheduler.remove_task("token_check")
             if self.HomeInterface.connected:
                 self.HomeInterface._connect_wg(None)
-            else:
-                event.ignore()
+        else:
+            event.ignore()
 
 
 class App(QWidget):
