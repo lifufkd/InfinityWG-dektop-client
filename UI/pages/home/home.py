@@ -97,7 +97,7 @@ class Home(Ui_Home, QWidget):
             return False
         self.CurrentIPText.setText(current_ip_address["data"])
         self.CurrentCountryText.setText(current_country["data"])
-        ico_path = f"resources/country_flags/{current_country["data"]}.ico"
+        ico_path = f"resources/country_flags/{current_country['data']}.ico"
         if os.path.exists(ico_path):
             self.CountryIcon.setIcon(ico_path)
         else:
@@ -115,12 +115,12 @@ class Home(Ui_Home, QWidget):
                 if status["data"]["code"] in range(2):
                     _status = methods[status["data"]["code"]]()
                     if not _status["status"]:
-                        self.info_bar_signal.emit("Error", f"Error getting config - {status["data"]["detail"]}",
+                        self.info_bar_signal.emit("Error", f"Error getting config - {status['data']['detail']}",
                                                   "warning", self)
                         return False
                     continue
                 else:
-                    self.info_bar_signal.emit("Error", f"Error getting config - {status["data"]["detail"]}",
+                    self.info_bar_signal.emit("Error", f"Error getting config - {status['data']['detail']}",
                                               "warning", self)
                     return False
             else:
