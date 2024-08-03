@@ -5,6 +5,7 @@
 import os
 import subprocess
 from utilities.system import os_type, create_config
+from resources.vars import WG_CONFIGS_NAME, WG_DEFAULT_CONFIG_LOCATION
 ##########################
 
 ##########################
@@ -14,24 +15,53 @@ class WireGuard:
     def __init__(self):
         super().__init__()
 
-    def connect(self, config: str | None = None, path: str = "resources/wireguard/config.conf") -> dict:
-        path = (os.getcwd() + "/" + path).replace("\\", "/")
-        status = create_config(path=path, config=config)
+    def connect(self, config: str | None = None, path: str | None = None,
+                config_name: str | None = None) -> dict:
+        _os_type = os_type()
+
+        def _get_path():
+            if path is None or config_name is None:
+                return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
+                        "\\", "/")
+            else:
+                if _os_type == "windows":
+                    return config_name
+                else:
+                    return (path + "/" + config_name).replace(
+                            "\\", "/")
+
+        status = create_config(path=_get_path(), config=config)
         if not status["status"]:
             return {"status": False, "detail": status["detail"]}
-        if os_type() == "windows":
-            status = self.connect_windows(path)
-        elif os_type() == "unix":
-            status = self.connect_linux_mac(path)
+        if _os_type == "windows":
+            status = self.connect_windows(_get_path())
+        elif _os_type in ["linux", "darwin"]:
+            status = self.connect_linux_mac(_get_path())
         else:
             status = {"status": False, "detail": "Your OS type is not supported"}
         return status
 
-    def disconnect(self, path: str = "config") -> dict:
-        if os_type() == "windows":
-            status = self.disconnect_windows(path)
-        elif os_type() == "unix":
-            status = self.disconnect_linux_mac(path)
+    def disconnect(self, path: str | None = None, config_name: str | None = None) -> dict:
+        _os_type = os_type()
+
+        def _get_path():
+            if path is None or config_name is None:
+                if _os_type == "windows":
+                    return WG_CONFIGS_NAME
+                else:
+                    return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
+                            "\\", "/")
+            else:
+                if _os_type == "windows":
+                    return config_name
+                else:
+                    return (path + "/" + config_name).replace(
+                            "\\", "/")
+
+        if _os_type == "windows":
+            status = self.disconnect_windows(_get_path())
+        elif _os_type in ["linux", "darwin"]:
+            status = self.disconnect_linux_mac(_get_path())
         else:
             status = {"status": False, "detail": "Your OS type is not supported"}
         return status
