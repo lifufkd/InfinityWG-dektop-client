@@ -56,7 +56,7 @@ def check_ping(domain, duration):
     pings = []
 
     while time.time() - start_time < duration:
-        ping_time = ping(domain, timeout=1)
+        ping_time = ping(domain, timeout=5)
         if ping_time is not None:
             pings.append(ping_time * 1000)  # Конвертируем секунды в миллисекунды
 

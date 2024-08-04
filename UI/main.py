@@ -136,7 +136,7 @@ class App(QWidget):
         else:
             self.load_app()
             self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
-            self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=1000)
+            self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=2000)
             self._main.show()
 
     def load_login(self):
@@ -161,7 +161,7 @@ class App(QWidget):
         self.load_app()
         self._main.resize(1280, 720)
         self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
-        self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=1000)
+        self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=2000)
         self._main.show()
         self._login_window.hide()
         self._reg_window.hide()
@@ -190,11 +190,11 @@ class App(QWidget):
     def check_internet_available(self, stop_signal):
         status = None
 
-        for i in range(2):
-            if check_ping(domain=self._config.get(self._config.internet_check), duration=1):
+        for i in range(5):
+            if check_ping(domain=self._config.get(self._config.internet_check), duration=2):
                 status = True
                 break
-
+        print(status)
         if status is None:
             if self._main.HomeInterface.connected:
                 self._main.HomeInterface._connect_wg(None)

@@ -3,6 +3,7 @@
 #          SBR           #
 ##########################
 import platform
+import subprocess
 from plyer import notification
 from modules.network import check_ping
 ##########################
@@ -30,12 +31,19 @@ def create_config(path: str, config: str | None) -> dict:
 
 def send_notification(title: str, text: str, duration: int = 5) -> dict:
     try:
-        notification.notify(
-            title=title,
-            message=text,
-            timeout=duration
-        )
-        return {"status": True, "detail": "OK"}
+        match os_type():
+            case 'linux':
+                subprocess.run(['notify-send', title, text])
+            case 'darwin':
+                script = f'display notification "{text}" with title "{title}"'
+                subprocess.run(['osascript', '-e', script])
+            case 'windows':
+                notification.notify(
+                    title=title,
+                    message=text,
+                    timeout=duration
+                )
+        return {"status": True, "detail": None}
     except Exception as e:
         return {"status": False, "detail": str(e)}
 
