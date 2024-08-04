@@ -9,9 +9,9 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentTranslator
 from PySide6.QtCore import QLocale
 
-from utilities.config import Config
-from utilities.schedule import TaskScheduler
-from utilities.wireguard import WireGuard
+from modules.config import Config
+from modules.schedule import TaskScheduler
+from modules.wireguard import WireGuard
 from API.Requests import Authorization, VPN
 from UI.main import App
 ##########################

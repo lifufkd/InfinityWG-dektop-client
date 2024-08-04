@@ -4,9 +4,9 @@
 ##########################
 import requests
 from typing import Optional
-from utilities.config import Config
-from utilities.network import get_ip_address, process_request, json_error_handler
-from utilities.system import check_best_vpn_server
+from modules.config import Config
+from modules.network import get_ip_address, process_request, json_error_handler
+from modules.system import check_best_vpn_server
 ##########################
 
 ##########################

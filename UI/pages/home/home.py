@@ -9,12 +9,12 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import FluentIcon
 from UI.pages.home.UI_home import Ui_Home
-from utilities.network import get_ip_address, get_country_by_ip
-from utilities.ui import SelectCountryMessageBox, createWarningInfoBar
+from modules.network import get_ip_address, get_country_by_ip
+from modules.ui import SelectCountryMessageBox, createWarningInfoBar
 from API.Requests import VPN
-from utilities.schedule import TaskScheduler
-from utilities.wireguard import WireGuard
-from utilities.ui import wg_status_notify, thread_handler
+from modules.schedule import TaskScheduler
+from modules.wireguard import WireGuard
+from modules.ui import wg_status_notify, thread_handler
 ##########################
 
 ##########################

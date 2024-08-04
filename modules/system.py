@@ -4,7 +4,7 @@
 ##########################
 import platform
 from plyer import notification
-from utilities.network import check_ping
+from modules.network import check_ping
 ##########################
 
 ##########################

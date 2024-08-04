@@ -9,7 +9,7 @@ from PySide6.QtCore import Qt
 from API.Requests import VPN
 from qfluentwidgets import (InfoBar, InfoBarPosition, InfoBarIcon,
                             MessageBoxBase, SubtitleLabel, LineEdit, ComboBox)
-from utilities.system import send_notification
+from modules.system import send_notification
 ##########################
 
 ##########################

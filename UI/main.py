@@ -12,9 +12,9 @@ from UI.pages.registration.registration import RegistrationWindow
 from UI.pages.home.home import Home
 from resources.vars import APP_NAME
 from API.Requests import Authorization, VPN
-from utilities.schedule import TaskScheduler
-from utilities.wireguard import WireGuard
-from utilities.ui import thread_handler
+from modules.schedule import TaskScheduler
+from modules.wireguard import WireGuard
+from modules.ui import thread_handler
 ##########################
 
 ##########################
