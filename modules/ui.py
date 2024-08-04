@@ -45,43 +45,6 @@ class SettingMessageBox(MessageBoxBase):
         self.widget.setMinimumWidth(350)
 
 
-def createSuccessInfoBar(parent, title: str, content: str):
-    InfoBar.success(
-        title=title,
-        content=content,
-        orient=Qt.Horizontal,
-        isClosable=True,
-        position=InfoBarPosition.TOP_RIGHT,
-        duration=2000,
-        parent=parent
-    )
-
-
-def createWarningInfoBar(parent, title: str, content: str):
-    InfoBar.warning(
-        title=title,
-        content=content,
-        orient=Qt.Horizontal,
-        isClosable=False,
-        position=InfoBarPosition.TOP_RIGHT,
-        duration=5000,
-        parent=parent
-    )
-
-
-def createInfoInfoBar(parent, title: str, content: str):
-    InfoBar(
-        icon=InfoBarIcon.INFORMATION,
-        title=title,
-        content=content,
-        orient=Qt.Vertical,
-        isClosable=True,
-        position=InfoBarPosition.TOP_RIGHT,
-        duration=5000,
-        parent=parent
-    )
-
-
 class SelectCountryMessageBox(MessageBoxBase):
 
     def __init__(self, vpn: VPN, parent=None):
@@ -122,6 +85,55 @@ class SelectCountryMessageBox(MessageBoxBase):
         self.country_combo_box.setCurrentIndex(index)
 
 
+def createSuccessInfoBar(parent, title: str, content: str, duration: int = 2000):
+    InfoBar.success(
+        title=title,
+        content=content,
+        orient=Qt.Horizontal,
+        isClosable=False,
+        position=InfoBarPosition.TOP_RIGHT,
+        duration=duration,
+        parent=parent
+    )
+
+
+def createWarningInfoBar(parent, title: str, content: str, duration: int = 5000):
+    InfoBar.warning(
+        title=title,
+        content=content,
+        orient=Qt.Horizontal,
+        isClosable=False,
+        position=InfoBarPosition.TOP_RIGHT,
+        duration=duration,
+        parent=parent
+    )
+
+
+def error_info_bar(parent, title: str, content: str, duration: int = -1):
+    InfoBar.error(
+        title=title,
+        content=content,
+        orient=Qt.Vertical,  # Use vertical layout when the content is too long
+        isClosable=True,
+        position=InfoBarPosition.TOP_RIGHT,
+        duration=duration,
+        parent=parent
+    )
+
+
+def createInfoInfoBar(parent, title: str, content: str, duration: int = 5000):
+    InfoBar(
+        icon=InfoBarIcon.INFORMATION,
+        title=title,
+        content=content,
+        orient=Qt.Vertical,
+        isClosable=False,
+        position=InfoBarPosition.TOP_RIGHT,
+        duration=duration,
+        parent=parent
+    )
+
+
 def wg_status_notify(parent: object, connect_status: bool):
     if not connect_status:
         notification_text = "WireGuard tunnel successfully disconnected"
@@ -130,7 +142,3 @@ def wg_status_notify(parent: object, connect_status: bool):
     notify = send_notification(title="InfinityWG", text=notification_text)
     if not notify["status"]:
         createWarningInfoBar(title="Error", content=notify["detail"], parent=parent)
-
-
-def thread_handler(action):
-    action()

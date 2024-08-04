@@ -19,6 +19,10 @@ class Config(QConfig):
         "System", "host", "http://localhost:8000"
     )
 
+    internet_check = ConfigItem(
+        "System", "check_internet_domain", "google.com"
+    )
+
     country = ConfigItem(
         "VPN", "country", "Auto"
     )

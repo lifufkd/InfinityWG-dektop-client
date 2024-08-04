@@ -66,5 +66,24 @@ def check_best_vpn_server(countries: dict, mode: bool | None = None) -> list[str
         return best_vpn_servers
 
 
+def update_servers(vpn, update_type: str | int = None) -> bool:
+    methods = [vpn.update_best_vpn_address, vpn.update_best_vpn_countries]
+    match update_type:
+        case "best_vpn_address" | 0:
+            repetitions = 1
+            index = 0
+        case "best_vpn_countries" | 1:
+            repetitions = 1
+            index = 1
+        case _:
+            index = 0
+            repetitions = 2
+    for i in range(index, index + repetitions):
+        _status = methods[i]()
+        if not _status["status"]:
+            return False
+        return True
+
+
 
 

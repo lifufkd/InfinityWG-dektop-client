@@ -4,7 +4,7 @@
 ##########################
 import os
 import subprocess
-from utilities.system import os_type, create_config
+from modules.system import os_type, create_config
 from resources.vars import WG_CONFIGS_NAME, WG_DEFAULT_CONFIG_LOCATION
 ##########################
 

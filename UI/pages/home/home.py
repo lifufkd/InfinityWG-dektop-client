@@ -10,11 +10,12 @@ from PySide6.QtWidgets import QWidget
 from qfluentwidgets import FluentIcon
 from UI.pages.home.UI_home import Ui_Home
 from modules.network import get_ip_address, get_country_by_ip
-from modules.ui import SelectCountryMessageBox, createWarningInfoBar
+from modules.ui import SelectCountryMessageBox, createWarningInfoBar, error_info_bar
 from API.Requests import VPN
 from modules.schedule import TaskScheduler
 from modules.wireguard import WireGuard
-from modules.ui import wg_status_notify, thread_handler
+from modules.ui import wg_status_notify
+from modules.system import update_servers
 ##########################
 
 ##########################
@@ -50,7 +51,10 @@ class Home(Ui_Home, QWidget):
                 createWarningInfoBar(title=title,
                                      content=text,
                                      parent=parent)
-                return True
+            case "error":
+                error_info_bar(title=title,
+                               content=text,
+                               parent=parent)
 
     def new_connection_wg(self):
         self._scheduler.add_task(task_name="wg_update_config", task=self._new_connection_wg)
@@ -63,9 +67,10 @@ class Home(Ui_Home, QWidget):
 
     def process_logout(self):
         self._scheduler.remove_task("token_check")
+        self._scheduler.remove_task("internet_check")
         self.logout_signal.emit()
 
-    def _connect_wg(self, stop_callback, config: str | None = None, recovery: bool | None = None):
+    def _connect_wg(self, stop_callback, config: str | None = None) -> bool:
         if self.connected:
             self._wireguard.disconnect()
             self.connected = False
@@ -78,15 +83,7 @@ class Home(Ui_Home, QWidget):
         wg_status_notify(connect_status=self.connected, parent=self)
         time.sleep(1)
 
-        internet_connection_status = self._update_country_and_ip(None)
-        if recovery:
-            self.process_logout()
-        elif not internet_connection_status and self.connected:
-            self._vpn.set_country_config("Auto")
-            if not self._new_connection_wg(None, recovery=True):
-                self.process_logout()
-        elif not internet_connection_status and not self.connected:
-            self.process_logout()
+        return self._update_country_and_ip(None)
 
     def _update_country_and_ip(self, stop_callback) -> bool:
         current_country = get_country_by_ip()
@@ -104,17 +101,16 @@ class Home(Ui_Home, QWidget):
             self.CountryIcon.setIcon(None)
         return True
 
-    def _new_connection_wg(self, stop_callback, recovery: bool | None = None):
+    def _new_connection_wg(self, stop_callback, server_quality: int = -1) -> bool:
         while True:
-            status = self._vpn.get_wg_config(country=self._vpn.get_country_config())
+            status = self._vpn.get_wg_config(country=self._vpn.get_country_config(), server_quality=server_quality)
             if "data" not in status:
                 self.info_bar_signal.emit("Error", status["detail"], "warning", self)
                 return False
             elif not status["status"]:
-                methods = [self._vpn.update_best_vpn_address, self._vpn.update_best_vpn_countries]
                 if status["data"]["code"] in range(2):
-                    _status = methods[status["data"]["code"]]()
-                    if not _status["status"]:
+                    _status = update_servers(self._vpn, status["data"]["code"])
+                    if not _status:
                         self.info_bar_signal.emit("Error", f"Error getting config - {status['data']['detail']}",
                                                   "warning", self)
                         return False
@@ -126,8 +122,7 @@ class Home(Ui_Home, QWidget):
             else:
                 if self.connected:
                     self._connect_wg(None)
-                self._connect_wg(None, config=status["data"]["config"], recovery=recovery)
-                return True
+                return self._connect_wg(None, config=status["data"]["config"])
 
     def select_country(self):
         w = SelectCountryMessageBox(vpn=self._vpn, parent=self)

@@ -2,8 +2,10 @@
 #       Created By       #
 #          SBR           #
 ##########################
+import time
+
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import NavigationItemPosition, SplitFluentWindow, FluentIcon as FIF, Dialog
 
@@ -14,7 +16,9 @@ from resources.vars import APP_NAME
 from API.Requests import Authorization, VPN
 from modules.schedule import TaskScheduler
 from modules.wireguard import WireGuard
-from modules.ui import thread_handler
+from modules.ui import createWarningInfoBar, error_info_bar
+from modules.network import check_ping
+from modules.config import Config
 ##########################
 
 ##########################
@@ -69,6 +73,7 @@ class Main(SplitFluentWindow):
         w = Dialog("Exit", "Are you sure you want to close the program?", self)
         if w.exec():
             self._scheduler.remove_task("token_check")
+            self._scheduler.remove_task("internet_check")
             if self.HomeInterface.connected:
                 self.HomeInterface._connect_wg(None)
         else:
@@ -76,14 +81,16 @@ class Main(SplitFluentWindow):
 
 
 class App(QWidget):
-    thread_handler_signal = Signal(object)
+    run_function_signal = Signal(object)
+    info_bar_signal = Signal(str, str, str, object)
 
     def __init__(self,
                  authorization: Authorization,
                  scheduler: TaskScheduler,
-                 token_status: bool,
+                 vpn: VPN,
+                 config: Config,
                  wireguard: WireGuard,
-                 vpn: VPN):
+                 token_status: bool):
         super().__init__()
 
         self._scheduler = scheduler
@@ -91,14 +98,37 @@ class App(QWidget):
         self._wireguard = wireguard
         self._authorization = authorization
         self._token_status = token_status
+        self._config = config
+
         self._login_window = None
         self._reg_window = None
         self._main = None
 
+        self._token_check_flag = None
+
         self.init()
 
+    @Slot(str, str, str, object)
+    def info_bar_handler(self, title, text, type, parent):
+        match type:
+            case "info":
+                pass
+            case "warning":
+                createWarningInfoBar(title=title,
+                                     content=text,
+                                     parent=parent)
+            case "error":
+                error_info_bar(title=title,
+                               content=text,
+                               parent=parent)
+
+    @Slot(object)
+    def thread_handler(self, action):
+        action()
+
     def init(self):
-        self.thread_handler_signal.connect(thread_handler)
+        self.run_function_signal.connect(self.thread_handler)
+        self.info_bar_signal.connect(self.info_bar_handler)
         if not self._token_status:
             self.load_login()
             self.load_reg()
@@ -106,12 +136,13 @@ class App(QWidget):
         else:
             self.load_app()
             self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
+            self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=1000)
             self._main.show()
 
     def load_login(self):
         if self._login_window is None:
             self._login_window = LoginWindow(self._authorization)
-            self._login_window.sw_open_app.connect(self.show_app)
+            self._login_window.sw_open_app.connect(self.open_app)
             self._login_window.sw_open_reg.connect(self.open_reg)
 
     def load_reg(self):
@@ -126,12 +157,23 @@ class App(QWidget):
             if not self._vpn.update_ip_address()["status"]:
                 self.logout()
 
-    def show_app(self):
+    def open_app(self):
         self.load_app()
         self._main.resize(1280, 720)
         self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
+        self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=1000)
         self._main.show()
         self._login_window.hide()
+        self._reg_window.hide()
+
+    def open_reg(self):
+        self._reg_window.resize(1280, 720)
+        self._reg_window.show()
+        self._login_window.hide()
+
+    def open_login(self):
+        self._login_window.resize(1280, 720)
+        self._login_window.show()
         self._reg_window.hide()
 
     def logout(self):
@@ -145,20 +187,49 @@ class App(QWidget):
         if self._main.HomeInterface.connected:
             self._main.HomeInterface.connect_wg()
 
-    def open_reg(self):
-        self._reg_window.resize(1280, 720)
-        self._reg_window.show()
-        self._login_window.hide()
+    def check_internet_available(self, stop_signal):
+        status = None
 
-    def open_login(self):
-        self._login_window.resize(1280, 720)
-        self._login_window.show()
-        self._reg_window.hide()
+        for i in range(2):
+            if check_ping(domain=self._config.get(self._config.internet_check), duration=1):
+                status = True
+                break
+
+        if status is None:
+            if self._main.HomeInterface.connected:
+                self._main.HomeInterface._connect_wg(None)
+                for i in range(3):
+                    if self._main.HomeInterface._new_connection_wg(None, server_quality=-i - 1):
+                        return True
+                self.run_function_signal.emit(self.logout)
+                self._scheduler.remove_task("token_check")
+                stop_signal()
+            else:
+                self.run_function_signal.emit(self.logout)
+                self._scheduler.remove_task("token_check")
+                stop_signal()
+            return False
+        return True
 
     def check_token(self, stop_callback):
-        status = self._authorization.check_token()["status"]
-        if not status:
-            self.thread_handler_signal.emit(self.logout)
-            stop_callback()
+
+        status = self._authorization.check_token()
+        if not status["status"]:
+            if status["code"] == 0:
+                self.run_function_signal.emit(self.logout)
+                self._scheduler.remove_task("internet_check")
+                stop_callback()
+            else:
+                if self._token_check_flag:
+                    if status["code"] == 1:
+                        self.info_bar_signal.emit("Warning", status["detail"],
+                                                  "warning", self._main)
+                    elif status["code"] == 2:
+                        self.info_bar_signal.emit("Error", "Lost connection to server",
+                                                  "error", self._main)
+                        self._token_check_flag = False
+        else:
+            if not self._token_check_flag:
+                self._token_check_flag = True
 
 

@@ -35,15 +35,18 @@ def get_country_by_ip():
 
 def json_error_handler(response):
     try:
-        answer = {"status": False, **response.json()}
+        answer = {"status": False, "code": 1, **response.json()}
     except Exception as e:
-        answer = {"status": False, "detail": f"Server Error: {response.status_code}"}
+        answer = {"status": False, "code": 1, "detail":
+                  f"Error code: {response.status_code}. No additional info is available"}
     return answer
 
 
 def process_request(response):
     if response.status_code == 200:
-        return {"status": True, **response.json()}
+        return {"status": True, "code": None, **response.json()}
+    elif response.status_code == 401:
+        return {"status": False, "code": 0, **response.json()}
     else:
         return json_error_handler(response)
 
@@ -53,7 +56,7 @@ def check_ping(domain, duration):
     pings = []
 
     while time.time() - start_time < duration:
-        ping_time = ping(domain)
+        ping_time = ping(domain, timeout=1)
         if ping_time is not None:
             pings.append(ping_time * 1000)  # Конвертируем секунды в миллисекунды
 
@@ -63,6 +66,8 @@ def check_ping(domain, duration):
     # Calculate the average ping time
     if pings:
         average_ping = sum(pings) / len(pings)
+        if average_ping == 0.0:
+            return None
         return average_ping
     else:
         return None
