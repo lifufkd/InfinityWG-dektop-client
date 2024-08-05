@@ -36,7 +36,7 @@ class Authorization:
             "Authorization": f"Bearer {self.get_token()}"
         }
         try:
-            response = requests.get(request_url, headers=headers, timeout=1)
+            response = requests.get(request_url, headers=headers, timeout=3)
         except Exception as e:
             return {"status": False, "detail": e, "code": 2}
         return process_request(response=response)
@@ -156,14 +156,31 @@ class VPN:
         else:
             return json_error_handler(response)
 
-    def get_wg_config(self, country: str | None = None, server_quality: int = -1) -> Optional[dict]:
-        request_url = self._host_url + "/get/config"
+    def create_config_request(self, country: str | None = None, server_quality: int = -1) -> Optional[dict]:
+        request_url = self._host_url + "/request/config"
         headers = {
             "Authorization": f"Bearer {self._authorization.get_token()}"
         }
         data = {
             "country": country,
             "server_quality": server_quality
+        }
+        try:
+            response = requests.post(request_url, headers=headers, json=data)
+        except Exception as e:
+            return {"status": False, "detail": e}
+        if response.status_code == 200:
+            return {"status": response.json().get('status'), "data": response.json()}
+        else:
+            return json_error_handler(response)
+
+    def get_config(self, request_id: int) -> Optional[dict]:
+        request_url = self._host_url + "/get/config"
+        headers = {
+            "Authorization": f"Bearer {self._authorization.get_token()}"
+        }
+        data = {
+            "request_id": request_id
         }
         try:
             response = requests.post(request_url, headers=headers, json=data)

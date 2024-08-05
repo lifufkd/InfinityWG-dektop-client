@@ -154,8 +154,8 @@ class App(QWidget):
         if self._main is None:
             self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
             self._main.HomeInterface.logout_signal.connect(self.logout)
-            if not self._vpn.update_ip_address()["status"]:
-                self.logout()
+        self._vpn.update_ip_address()
+        self._main.HomeInterface.update_country_and_ip()
 
     def open_app(self):
         self.load_app()

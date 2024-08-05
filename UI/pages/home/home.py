@@ -40,8 +40,6 @@ class Home(Ui_Home, QWidget):
         self.ConnectBtn.clicked.connect(self.connect_wg)
         self.ChangeIpBtn.clicked.connect(self.new_connection_wg)
 
-        self.update_country_and_ip()
-
     @Slot(str, str, str, object)
     def info_bar_handler(self, title, text, type, parent):
         match type:
@@ -102,8 +100,10 @@ class Home(Ui_Home, QWidget):
         return True
 
     def _new_connection_wg(self, stop_callback, server_quality: int = -1) -> bool:
+        counter = 0
         while True:
-            status = self._vpn.get_wg_config(country=self._vpn.get_country_config(), server_quality=server_quality)
+            status = self._vpn.create_config_request(country=self._vpn.get_country_config(),
+                                                     server_quality=server_quality)
             if "data" not in status:
                 self.info_bar_signal.emit("Error", status["detail"], "warning", self)
                 return False
@@ -120,9 +120,18 @@ class Home(Ui_Home, QWidget):
                                               "warning", self)
                     return False
             else:
-                if self.connected:
-                    self._connect_wg(None)
-                return self._connect_wg(None, config=status["data"]["config"])
+                while True:
+                    if counter >= 45:
+                        self.info_bar_signal.emit("Warning", f"Riches timeout while waiting config",
+                                                  "warning", self)
+                        return False
+                    _status = self._vpn.get_config(request_id=status["data"]["request_id"])
+                    if _status["status"]:
+                        if self.connected:
+                            self._connect_wg(None)
+                        return self._connect_wg(None, config=_status["data"]["config"])
+                    counter += 1
+                    time.sleep(2)
 
     def select_country(self):
         w = SelectCountryMessageBox(vpn=self._vpn, parent=self)
