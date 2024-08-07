@@ -2,6 +2,7 @@
 #       Created By       #
 #          SBR           #
 ##########################
+import os
 import platform
 import subprocess
 from plyer import notification
@@ -17,6 +18,41 @@ def os_type():
         return os_name.lower()
     else:
         return "undetected"
+
+
+def country_serializer(flags_path: str, compare_country: str) -> str | None:
+    flags = list()
+    flags_serialized = dict()
+
+    def remove_articles(text) -> str:
+        articles = {'a', 'an', 'the'}
+        words = text.split()
+        filtered_words = [word for word in words if word.lower() not in articles]
+        return ' '.join(filtered_words)
+
+    def process_country(_country: str) -> str:
+        first_processing = _country.replace("-", " ")
+        second_processing = remove_articles(first_processing)
+        third_processing = second_processing.replace(" ", "").replace("-", "").lower()
+        if '.' in third_processing:
+            return third_processing[:third_processing.index('.')]
+        else:
+            return third_processing
+
+    files_list = os.listdir(flags_path)
+    for f in files_list:
+        if os.path.isfile(os.path.join(flags_path, f)):
+            flags.append(f)
+    for flag in flags:
+        new_flag = process_country(flag)
+        flags_serialized.update({new_flag: flag})
+
+    result = flags_serialized.get(process_country(compare_country), "undefined")
+    if result == "undefined":
+        return None
+
+    return flags_path + "/" + result
+
 
 
 def create_config(path: str, config: str | None) -> dict:

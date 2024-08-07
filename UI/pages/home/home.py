@@ -15,7 +15,7 @@ from API.Requests import VPN
 from modules.schedule import TaskScheduler
 from modules.wireguard import WireGuard
 from modules.ui import wg_status_notify
-from modules.system import update_servers
+from modules.system import update_servers, country_serializer
 ##########################
 
 ##########################
@@ -92,8 +92,9 @@ class Home(Ui_Home, QWidget):
             return False
         self.CurrentIPText.setText(current_ip_address["data"])
         self.CurrentCountryText.setText(current_country["data"])
-        ico_path = f"resources/country_flags/{current_country['data']}.ico"
-        if os.path.exists(ico_path):
+        ico_path = country_serializer("resources/country_flags", current_country["data"])
+        print(ico_path)
+        if ico_path is not None:
             self.CountryIcon.setIcon(ico_path)
         else:
             self.CountryIcon.setIcon(None)

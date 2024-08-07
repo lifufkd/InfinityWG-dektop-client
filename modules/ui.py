@@ -2,6 +2,7 @@
 #       Created By       #
 #          SBR           #
 ##########################
+import os
 import sys
 from typing import Optional
 
@@ -9,7 +10,7 @@ from PySide6.QtCore import Qt
 from API.Requests import VPN
 from qfluentwidgets import (InfoBar, InfoBarPosition, InfoBarIcon,
                             MessageBoxBase, SubtitleLabel, LineEdit, ComboBox)
-from modules.system import send_notification
+from modules.system import send_notification, country_serializer
 ##########################
 
 ##########################
@@ -73,8 +74,12 @@ class SelectCountryMessageBox(MessageBoxBase):
         countries.append(
             ("Unknown", "Auto")
         )
-        for icon_path, name in countries:
-            self.country_combo_box.addItem(icon=f"resources/country_flags/{icon_path}.ico", text=name)
+        for country, name in countries:
+            icon_path = country_serializer("resources/country_flags", country)
+            if icon_path is not None:
+                self.country_combo_box.addItem(icon=icon_path, text=name)
+            else:
+                self.country_combo_box.addItem(text=name)
 
     def setDefaultValue(self, country: str = "Auto"):
         index = self.country_combo_box.findText(country)
