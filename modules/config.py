@@ -12,6 +12,18 @@ class Config(QConfig):
     """ Config of application """
 
     # System settings
+    login_width = ConfigItem(
+        "UI", "login_width", 1280)
+
+    login_height = ConfigItem(
+        "UI", "login_height", 720)
+
+    app_width = ConfigItem(
+        "UI", "app_width", 1280)
+
+    app_height = ConfigItem(
+        "UI", "app_height", 720)
+
     token = ConfigItem(
         "System", "token", "")
 

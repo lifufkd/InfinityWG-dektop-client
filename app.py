@@ -26,7 +26,6 @@ def start_gui() -> None:
                  scheduler=scheduler,
                  vpn=vpn,
                  wireguard=wireguard,
-                 config=config,
                  token_status=authorization.check_token()["status"])
     app.exec()
 

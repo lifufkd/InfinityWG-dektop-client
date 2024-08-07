@@ -29,6 +29,7 @@ class Main(SplitFluentWindow):
         super().__init__()
         # create sub interface
         self.HomeInterface = Home(vpn=vpn, scheduler=scheduler, wireguard=wireguard, parent=self)
+        self._config = Config()
 
         self._scheduler = scheduler
         self._wireguard = wireguard
@@ -57,7 +58,7 @@ class Main(SplitFluentWindow):
         self.navigationInterface.setExpandWidth(280)
 
     def initWindow(self):
-        self.resize(1280, 720)
+        self.resize(self._config.get(self._config.app_width), self._config.get(self._config.app_height))
         self.setWindowIcon(QIcon('resources/images/logo.svg'))
         self.setWindowTitle(APP_NAME)
 
@@ -68,6 +69,11 @@ class Main(SplitFluentWindow):
     def process_logout(self):
         self._scheduler.remove_task("token_check")
         self.HomeInterface.logout_signal.emit()
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self._config.set(self._config.app_width, e.size().width())
+        self._config.set(self._config.app_height, e.size().height())
 
     def closeEvent(self, event):
         w = Dialog("Exit", "Are you sure you want to close the program?", self)
@@ -88,7 +94,6 @@ class App(QWidget):
                  authorization: Authorization,
                  scheduler: TaskScheduler,
                  vpn: VPN,
-                 config: Config,
                  wireguard: WireGuard,
                  token_status: bool):
         super().__init__()
@@ -98,7 +103,7 @@ class App(QWidget):
         self._wireguard = wireguard
         self._authorization = authorization
         self._token_status = token_status
-        self._config = config
+        self._config = Config()
 
         self._login_window = None
         self._reg_window = None
@@ -132,7 +137,7 @@ class App(QWidget):
         if not self._token_status:
             self.load_login()
             self.load_reg()
-            self._login_window.show()
+            self.open_login()
         else:
             self.load_app()
             self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
@@ -159,7 +164,6 @@ class App(QWidget):
 
     def open_app(self):
         self.load_app()
-        self._main.resize(1280, 720)
         self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
         self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=2000)
         self._main.show()
@@ -167,12 +171,12 @@ class App(QWidget):
         self._reg_window.hide()
 
     def open_reg(self):
-        self._reg_window.resize(1280, 720)
+        self._reg_window.resize(self._config.get(self._config.login_width), self._config.get(self._config.login_height))
         self._reg_window.show()
         self._login_window.hide()
 
     def open_login(self):
-        self._login_window.resize(1280, 720)
+        self._login_window.resize(self._config.get(self._config.login_width), self._config.get(self._config.login_height))
         self._login_window.show()
         self._reg_window.hide()
 
@@ -194,7 +198,6 @@ class App(QWidget):
             if check_ping(domain=self._config.get(self._config.internet_check), duration=2):
                 status = True
                 break
-        print(status)
         if status is None:
             if self._main.HomeInterface.connected:
                 self._main.HomeInterface._connect_wg(None)

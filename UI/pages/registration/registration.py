@@ -11,6 +11,7 @@ from modules.ui import (isWin11, select_window, createWarningInfoBar,
                         createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
+from modules.config import Config
 ##########################
 
 ##########################
@@ -24,18 +25,30 @@ class RegistrationWindow(Window, Ui_Registration):
 
     def __init__(self, authorization: Authorization):
         super().__init__()
+
+        self.original_pixmap = None
+        self._config = Config()
+
         self.setupUi(self)
         setTheme(Theme.AUTO)
 
         self._authorization = authorization
         self.setTitleBar(SplitTitleBar(self))
         self.titleBar.raise_()
-
         self.LoginImage.setScaledContents(False)
         self.setWindowTitle(APP_NAME)
-        self.setWindowIcon(QIcon("resources/images/logo.svg"))
-        self.resize(1280, 720)
 
+        self.RegisterpushButton.clicked.connect(self.registrate)
+        self.LoginPushButton.clicked.connect(lambda: self.sw_open_login.emit())
+        self.SettingsPushButton.clicked.connect(self.open_settings)
+        self.LoginPushButton.setIcon(FluentIcon.RETURN)
+        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
+
+        self.initWindow()
+
+    def initWindow(self):
+        self.resize(self._config.get(self._config.login_width), self._config.get(self._config.login_height))
+        self.setWindowIcon(QIcon("resources/images/logo.svg"))
         self.windowEffect.setMicaEffect(self.winId(), isDarkMode=isDarkTheme())
         if not isWin11():
             color = QColor(25, 33, 42) if isDarkTheme() else QColor(240, 244, 249)
@@ -43,13 +56,8 @@ class RegistrationWindow(Window, Ui_Registration):
 
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
-        self.move(w//2 - self.width()//2, h//2 - self.height()//2)
-
-        self.RegisterpushButton.clicked.connect(self.registrate)
-        self.LoginPushButton.clicked.connect(lambda: self.sw_open_login.emit())
-        self.SettingsPushButton.clicked.connect(self.open_settings)
-        self.LoginPushButton.setIcon(FluentIcon.RETURN)
-        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
+        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+        self.original_pixmap = QPixmap("resources/images/login_background.jpg")
 
     def registrate(self):
         login = self.LoginlineEdit.text()
@@ -111,7 +119,9 @@ class RegistrationWindow(Window, Ui_Registration):
             self._authorization.change_host_url(w.urlLineEdit.text())
 
     def resizeEvent(self, e):
+        self._config.set(self._config.login_width, e.size().width())
+        self._config.set(self._config.login_height, e.size().height())
         super().resizeEvent(e)
-        pixmap = QPixmap("resources/images/register_background.jpg").scaled(
+        pixmap = self.original_pixmap.scaled(
             self.LoginImage.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
         self.LoginImage.setPixmap(pixmap)
