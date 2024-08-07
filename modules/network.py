@@ -119,7 +119,7 @@ def check_internet_and_dns(hosts: str, duration: int = 5) -> bool:
     else:
         dns_status = False
 
-    if ping_status or http_status or dns_status:
+    if ping_status and http_status and dns_status:
         return True
     else:
         return False
