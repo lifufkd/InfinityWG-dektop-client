@@ -32,7 +32,10 @@ class Config(QConfig):
     )
 
     internet_check = ConfigItem(
-        "System", "check_internet_domain", "google.com"
+        "System", "check_internet_domain", [
+            ["8.8.8.8", "www.google.com"],
+            ["8.8.4.4", "www.cloudflare.com"]
+        ]
     )
 
     country = ConfigItem(

@@ -15,28 +15,52 @@ class WireGuard:
     def __init__(self):
         super().__init__()
 
+    @staticmethod
+    def _get_path_connect(path: str | None = None, config_name: str | None = None):
+        _os_type = os_type()
+
+        if path is None or config_name is None:
+            return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
+                "\\", "/")
+        else:
+            if _os_type == "windows":
+                return config_name
+            else:
+                return (path + "/" + config_name).replace(
+                    "\\", "/")
+
+    @staticmethod
+    def _get_path_disconnect(path: str | None = None, config_name: str | None = None):
+        _os_type = os_type()
+
+        if path is None or config_name is None:
+            if _os_type == "windows":
+                return WG_CONFIGS_NAME
+            else:
+                return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
+                    "\\", "/")
+        else:
+            if _os_type == "windows":
+                return config_name
+            else:
+                return (path + "/" + config_name).replace(
+                    "\\", "/")
+
+    def update_config(self, config: str, path: str | None = None, config_name: str | None = None):
+
+        return create_config(path=self._get_path_connect(path, config_name), config=config)
+
     def connect(self, config: str | None = None, path: str | None = None,
                 config_name: str | None = None) -> dict:
         _os_type = os_type()
 
-        def _get_path():
-            if path is None or config_name is None:
-                return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
-                        "\\", "/")
-            else:
-                if _os_type == "windows":
-                    return config_name
-                else:
-                    return (path + "/" + config_name).replace(
-                            "\\", "/")
-
-        status = create_config(path=_get_path(), config=config)
+        status = self.update_config(config=config, path=path, config_name=config_name)
         if not status["status"]:
             return {"status": False, "detail": status["detail"]}
         if _os_type == "windows":
-            status = self.connect_windows(_get_path())
+            status = self.connect_windows(self._get_path_connect(path, config_name))
         elif _os_type in ["linux", "darwin"]:
-            status = self.connect_linux_mac(_get_path())
+            status = self.connect_linux_mac(self._get_path_connect(path, config_name))
         else:
             status = {"status": False, "detail": "Your OS type is not supported"}
         return status
@@ -44,24 +68,10 @@ class WireGuard:
     def disconnect(self, path: str | None = None, config_name: str | None = None) -> dict:
         _os_type = os_type()
 
-        def _get_path():
-            if path is None or config_name is None:
-                if _os_type == "windows":
-                    return WG_CONFIGS_NAME
-                else:
-                    return (os.getcwd() + "/" + WG_DEFAULT_CONFIG_LOCATION + "/" + WG_CONFIGS_NAME + ".conf").replace(
-                            "\\", "/")
-            else:
-                if _os_type == "windows":
-                    return config_name
-                else:
-                    return (path + "/" + config_name).replace(
-                            "\\", "/")
-
         if _os_type == "windows":
-            status = self.disconnect_windows(_get_path())
+            status = self.disconnect_windows(self._get_path_disconnect(path, config_name))
         elif _os_type in ["linux", "darwin"]:
-            status = self.disconnect_linux_mac(_get_path())
+            status = self.disconnect_linux_mac(self._get_path_disconnect(path, config_name))
         else:
             status = {"status": False, "detail": "Your OS type is not supported"}
         return status

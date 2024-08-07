@@ -54,9 +54,9 @@ def country_serializer(flags_path: str, compare_country: str) -> str | None:
     return flags_path + "/" + result
 
 
-
 def create_config(path: str, config: str | None) -> dict:
-    if config is None: return {"status": True}
+    if config is None:
+        return {"status": True}
     try:
         with open(path, "w") as file:
             file.write(config)

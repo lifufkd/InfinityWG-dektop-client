@@ -5,6 +5,7 @@
 import time
 from ping3 import ping
 import requests
+import socket
 ##########################
 
 ##########################
@@ -12,7 +13,7 @@ import requests
 
 def get_ip_address():
     try:
-        response = requests.get('https://api.ipify.org?format=json', timeout=1)
+        response = requests.get('https://api.ipify.org?format=json', timeout=5)
         response.raise_for_status()
         ip_address = response.json()['ip']
         return {"status": True, "detail": None, "data": ip_address}
@@ -51,19 +52,17 @@ def process_request(response):
         return json_error_handler(response)
 
 
-def check_ping(domain, duration):
+def check_ping(domain, duration=5):
     start_time = time.time()
     pings = []
 
     while time.time() - start_time < duration:
         ping_time = ping(domain, timeout=5)
         if ping_time is not None:
-            pings.append(ping_time * 1000)  # Конвертируем секунды в миллисекунды
+            pings.append(ping_time * 1000)
 
-        # Sleep for a short time before the next ping
         time.sleep(1)
 
-    # Calculate the average ping time
     if pings:
         average_ping = sum(pings) / len(pings)
         if average_ping == 0.0:
@@ -71,3 +70,56 @@ def check_ping(domain, duration):
         return average_ping
     else:
         return None
+
+
+def check_internet_and_dns(hosts: str, duration: int = 5) -> bool:
+    ping_servers = list()
+    test_urls = list()
+    test_domains = list()
+
+    for host in hosts:
+        ping_servers.append(host[0])
+        test_domains.append(host[1])
+        test_urls.append("https://" + host[1])
+
+    # Проверка пинга
+    ping_success = any(check_ping(server, duration) for server in ping_servers)
+    if ping_success:
+        ping_status = True
+    else:
+        ping_status = False
+
+
+    # Проверка HTTP/HTTPS соединения
+    http_success = False
+    for url in test_urls:
+        try:
+            response = requests.get(url, timeout=duration)
+            if response.status_code == 200:
+                http_success = True
+                break
+        except requests.RequestException as e:
+            continue
+    if http_success:
+        http_status = True
+    else:
+        http_status = False
+
+    # Проверка разрешения DNS
+    dns_success = False
+    for domain in test_domains:
+        try:
+            socket.gethostbyname(domain)
+            dns_success = True
+            break
+        except socket.error as e:
+            continue
+    if dns_success:
+        dns_status = True
+    else:
+        dns_status = False
+
+    if ping_status or http_status or dns_status:
+        return True
+    else:
+        return False

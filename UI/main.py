@@ -17,7 +17,7 @@ from API.Requests import Authorization, VPN
 from modules.schedule import TaskScheduler
 from modules.wireguard import WireGuard
 from modules.ui import createWarningInfoBar, error_info_bar
-from modules.network import check_ping
+from modules.network import check_internet_and_dns
 from modules.config import Config
 ##########################
 
@@ -25,7 +25,7 @@ from modules.config import Config
 
 
 class Main(SplitFluentWindow):
-    def __init__(self, vpn: VPN, scheduler: TaskScheduler, wireguard: WireGuard):
+    def __init__(self, vpn: VPN, scheduler: TaskScheduler, wireguard: WireGuard, parent):
         super().__init__()
         # create sub interface
         self.HomeInterface = Home(vpn=vpn, scheduler=scheduler, wireguard=wireguard, parent=self)
@@ -33,6 +33,8 @@ class Main(SplitFluentWindow):
 
         self._scheduler = scheduler
         self._wireguard = wireguard
+        self._parent = parent
+
         self.initNavigation()
         self.initWindow()
 
@@ -67,8 +69,9 @@ class Main(SplitFluentWindow):
         self.move(w//2 - self.width()//2, h//2 - self.height()//2)
 
     def process_logout(self):
+        self._scheduler.remove_task("internet_check")
         self._scheduler.remove_task("token_check")
-        self.HomeInterface.logout_signal.emit()
+        self._parent.logout_signal.emit()
 
     def resizeEvent(self, e):
         super().resizeEvent(e)
@@ -89,6 +92,7 @@ class Main(SplitFluentWindow):
 class App(QWidget):
     run_function_signal = Signal(object)
     info_bar_signal = Signal(str, str, str, object)
+    logout_signal = Signal()
 
     def __init__(self,
                  authorization: Authorization,
@@ -134,6 +138,7 @@ class App(QWidget):
     def init(self):
         self.run_function_signal.connect(self.thread_handler)
         self.info_bar_signal.connect(self.info_bar_handler)
+        self.logout_signal.connect(self.logout)
         if not self._token_status:
             self.load_login()
             self.load_reg()
@@ -157,8 +162,7 @@ class App(QWidget):
 
     def load_app(self):
         if self._main is None:
-            self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
-            self._main.HomeInterface.logout_signal.connect(self.logout)
+            self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard, parent=self)
         update_ip_status = self._vpn.update_ip_address()
         if not update_ip_status["status"]:
             self.info_bar_signal.emit("Warning", update_ip_status["detail"],
@@ -195,17 +199,12 @@ class App(QWidget):
             self._main.HomeInterface.connect_wg()
 
     def check_internet_available(self, stop_signal):
-        status = None
 
-        for i in range(5):
-            if check_ping(domain=self._config.get(self._config.internet_check), duration=2):
-                status = True
-                break
-        if status is None:
+        if not check_internet_and_dns(hosts=self._config.get(self._config.internet_check), duration=5):
             if self._main.HomeInterface.connected:
                 self._main.HomeInterface._connect_wg(None)
                 for i in range(3):
-                    if self._main.HomeInterface._new_connection_wg(None, server_quality=-i - 1):
+                    if self._main.HomeInterface._new_connection_wg(None, server_quality=-i-1):
                         return True
                 self.run_function_signal.emit(self.logout)
                 self._scheduler.remove_task("token_check")
@@ -218,13 +217,12 @@ class App(QWidget):
         return True
 
     def check_token(self, stop_callback):
-
         status = self._authorization.check_token()
         if not status["status"]:
             if status["code"] == 0:
-                self.run_function_signal.emit(self.logout)
                 self._scheduler.remove_task("internet_check")
                 stop_callback()
+                self.logout_signal.emit()
             else:
                 if self._token_check_flag:
                     if status["code"] == 1:
@@ -237,5 +235,6 @@ class App(QWidget):
         else:
             if not self._token_check_flag:
                 self._token_check_flag = True
+
 
 
