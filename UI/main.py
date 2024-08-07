@@ -159,7 +159,10 @@ class App(QWidget):
         if self._main is None:
             self._main = Main(vpn=self._vpn, scheduler=self._scheduler, wireguard=self._wireguard)
             self._main.HomeInterface.logout_signal.connect(self.logout)
-        self._vpn.update_ip_address()
+        update_ip_status = self._vpn.update_ip_address()
+        if not update_ip_status["status"]:
+            self.info_bar_signal.emit("Warning", update_ip_status["detail"],
+                                      "warning", self._main)
         self._main.HomeInterface.update_country_and_ip()
 
     def open_app(self):
