@@ -200,19 +200,26 @@ class App(QWidget):
 
     def check_internet_available(self, stop_signal):
 
-        if not check_internet_and_dns(hosts=self._config.get(self._config.internet_check), duration=5):
+        def logout():
+            self.run_function_signal.emit(self.logout)
+            self._scheduler.remove_task("token_check")
+            stop_signal()
+
+        if not check_internet_and_dns(hosts=self._config.get(self._config.internet_check), duration=5) and self._config.get(self._config.is_internet_check):
             if self._main.HomeInterface.connected:
-                self._main.HomeInterface._connect_wg(None)
-                for i in range(3):
-                    if self._main.HomeInterface._new_connection_wg(None, server_quality=-i-1):
-                        return True
-                self.run_function_signal.emit(self.logout)
-                self._scheduler.remove_task("token_check")
-                stop_signal()
+
+                for i in range(2):
+                    self._main.HomeInterface._connect_wg(None)
+
+                if not check_internet_and_dns(hosts=self._config.get(self._config.internet_check), duration=5):
+                    for i in range(3):
+                        if self._main.HomeInterface._new_connection_wg(None, server_quality=-i-1):
+                            return True
+                    logout()
+                else:
+                    return True
             else:
-                self.run_function_signal.emit(self.logout)
-                self._scheduler.remove_task("token_check")
-                stop_signal()
+                logout()
             return False
         return True
 

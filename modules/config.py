@@ -42,6 +42,10 @@ class Config(QConfig):
         "VPN", "country", "Auto"
     )
 
+    is_internet_check = ConfigItem(
+        "Modules", "is_internet_check", True
+    )
+
     def __init__(self):
         super().__init__()
         self.setup_config()
