@@ -46,6 +46,10 @@ class Config(QConfig):
         "Modules", "is_internet_check", True
     )
 
+    network_speed_interval = ConfigItem(
+        "Modules", "network_speed_interval", 1
+    )
+
     def __init__(self):
         super().__init__()
         self.setup_config()

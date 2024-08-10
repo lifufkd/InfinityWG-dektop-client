@@ -83,6 +83,7 @@ class Main(SplitFluentWindow):
         if w.exec():
             self._scheduler.remove_task("token_check")
             self._scheduler.remove_task("internet_check")
+            self._scheduler.remove_task("network_stats")
             if self.HomeInterface.connected:
                 self.HomeInterface._connect_wg(None)
         else:
@@ -147,6 +148,7 @@ class App(QWidget):
             self.load_app()
             self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
             self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=2000)
+            self._scheduler.add_task(task_name="network_stats", task=self._main.HomeInterface._update_network_stats, interval=0)
             self._main.show()
 
     def load_login(self):
@@ -173,6 +175,8 @@ class App(QWidget):
         self.load_app()
         self._scheduler.add_task(task_name="token_check", task=self.check_token, interval=5000)
         self._scheduler.add_task(task_name="internet_check", task=self.check_internet_available, interval=2000)
+        self._scheduler.add_task(task_name="network_stats", task=self._main.HomeInterface._update_network_stats,
+                                 interval=0)
         self._main.show()
         self._login_window.hide()
         self._reg_window.hide()
@@ -189,7 +193,7 @@ class App(QWidget):
 
     def logout(self):
         self._authorization.change_token(token="")
-
+        self._scheduler.remove_task("network_stats")
         # UI
         self.load_login()
         self.load_reg()
@@ -201,7 +205,7 @@ class App(QWidget):
     def check_internet_available(self, stop_signal):
 
         def logout():
-            self.run_function_signal.emit(self.logout)
+            self.logout_signal.emit()
             self._scheduler.remove_task("token_check")
             stop_signal()
 

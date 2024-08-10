@@ -9,13 +9,14 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import FluentIcon
 from UI.pages.home.UI_home import Ui_Home
-from modules.network import get_ip_address, get_country_by_ip
+from modules.network import get_ip_address, get_country_by_ip, get_network_speed
 from modules.ui import SelectCountryMessageBox, createWarningInfoBar, error_info_bar
 from API.Requests import VPN
 from modules.schedule import TaskScheduler
 from modules.wireguard import WireGuard
 from modules.ui import wg_status_notify
-from modules.system import update_servers, country_serializer
+from modules.system import update_servers, country_serializer, convert_bytes
+from modules.config import Config
 ##########################
 
 ##########################
@@ -30,10 +31,14 @@ class Home(Ui_Home, QWidget):
         self._scheduler = scheduler
         self._wireguard = wireguard
         self._parent = parent
+        self._config = Config()
         self.connected = False
 
         self.setupUi(self)
         self.ChooseServerButton.setIcon(FluentIcon.UPDATE)
+        self.IncomingIcon.setIcon(FluentIcon.UP)
+        self.UpcomingIcon.setIcon(FluentIcon.DOWN)
+        self.progress_bar()
 
         self.info_bar_signal.connect(self.info_bar_handler)
         self.ChooseServerButton.clicked.connect(self.select_country)
@@ -54,6 +59,12 @@ class Home(Ui_Home, QWidget):
                                content=text,
                                parent=parent)
 
+    def progress_bar(self, switch: bool = False):
+        if not switch:
+            self.progressBar.setVisible(False)
+        else:
+            self.progressBar.setVisible(True)
+
     def new_connection_wg(self):
         self._scheduler.add_task(task_name="wg_update_config", task=self._new_connection_wg)
 
@@ -65,6 +76,7 @@ class Home(Ui_Home, QWidget):
 
     def _connect_wg(self, stop_callback, config: str | None = None) -> bool:
         self.ConnectBtn.setEnabled(False)
+        self.progress_bar(True)
         if self.connected:
             self._wireguard.disconnect()
             self.connected = False
@@ -78,6 +90,7 @@ class Home(Ui_Home, QWidget):
         time.sleep(1)
         _status = self._update_country_and_ip(None)
         self.ConnectBtn.setEnabled(True)
+        self.progress_bar()
         return _status
 
     def _update_country_and_ip(self, stop_callback) -> bool:
@@ -103,6 +116,7 @@ class Home(Ui_Home, QWidget):
 
         self.ChangeIpBtn.setEnabled(False)
         self.ChooseServerButton.setEnabled(False)
+        self.progress_bar(True)
         while True:
             status = self._vpn.create_config_request(country=self._vpn.get_country_config(),
                                                      server_quality=server_quality)
@@ -148,7 +162,15 @@ class Home(Ui_Home, QWidget):
 
         self.ChangeIpBtn.setEnabled(True)
         self.ChooseServerButton.setEnabled(True)
+        self.progress_bar()
         return __status
+
+    def _update_network_stats(self, stop_callback):
+        data = get_network_speed(interval=self._config.get(self._config.network_speed_interval))
+        if not data["status"]:
+            return False
+        self.IncomingText.setText(convert_bytes(data["bytes_recv"]))
+        self.UpcomingText.setText(convert_bytes(data["bytes_sent"]))
 
     def select_country(self):
         w = SelectCountryMessageBox(vpn=self._vpn, parent=self._parent)

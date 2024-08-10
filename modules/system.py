@@ -5,6 +5,7 @@
 import os
 import platform
 import subprocess
+import math
 from plyer import notification
 from modules.network import check_ping
 ##########################
@@ -127,6 +128,20 @@ def update_servers(vpn, update_type: str | int = None) -> bool:
         if not _status["status"]:
             return False
         return True
+
+
+def convert_bytes(size_bytes: int) -> str:
+    if size_bytes == 0:
+        return "0 B"
+
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+
+    i = int(math.floor(math.log(size_bytes, 1024)))
+
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+
+    return f"{s} {size_name[i]}"
 
 
 

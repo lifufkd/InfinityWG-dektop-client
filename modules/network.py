@@ -3,6 +3,7 @@
 #          SBR           #
 ##########################
 import time
+import psutil
 from ping3 import ping
 import requests
 import socket
@@ -123,3 +124,23 @@ def check_internet_and_dns(hosts: str, duration: int = 5) -> bool:
         return True
     else:
         return False
+
+
+def get_network_speed(interval: int = 1) -> dict:
+    try:
+        io_object = psutil.net_io_counters()
+        bytes_sent_start = io_object.bytes_sent
+        bytes_received_start = io_object.bytes_recv
+
+        time.sleep(interval)
+
+        final_data = psutil.net_io_counters()
+        final_bytes_sent = final_data.bytes_sent
+        final_bytes_recv = final_data.bytes_recv
+
+        bytes_sent_avg = (final_bytes_sent - bytes_sent_start) / interval
+        bytes_recv_avg = (final_bytes_recv - bytes_received_start) / interval
+    except Exception as e:
+        return {"status": False, "detail": str(e)}
+
+    return {"status": True, "bytes_sent": bytes_sent_avg, "bytes_recv": bytes_recv_avg}
