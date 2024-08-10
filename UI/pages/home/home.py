@@ -36,8 +36,8 @@ class Home(Ui_Home, QWidget):
 
         self.setupUi(self)
         self.ChooseServerButton.setIcon(FluentIcon.UPDATE)
-        self.IncomingIcon.setIcon(FluentIcon.UP)
-        self.UpcomingIcon.setIcon(FluentIcon.DOWN)
+        self.IncomingIcon.setIcon(FluentIcon.DOWN)
+        self.UpcomingIcon.setIcon(FluentIcon.UP)
         self.progress_bar()
 
         self.info_bar_signal.connect(self.info_bar_handler)
