@@ -9,12 +9,14 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QWidget
 from qfluentwidgets import FluentIcon
 from UI.pages.home.UI_home import Ui_Home
-from utilities.network import get_ip_address, get_country_by_ip
-from utilities.ui import SelectCountryMessageBox, createWarningInfoBar
+from modules.network import get_ip_address, get_country_by_ip, get_network_speed
+from modules.ui import SelectCountryMessageBox, createWarningInfoBar, error_info_bar
 from API.Requests import VPN
-from utilities.schedule import TaskScheduler
-from utilities.wireguard import WireGuard
-from utilities.ui import wg_status_notify, thread_handler
+from modules.schedule import TaskScheduler
+from modules.wireguard import WireGuard
+from modules.ui import wg_status_notify
+from modules.system import update_servers, country_serializer, convert_bytes
+from modules.config import Config
 ##########################
 
 ##########################
@@ -22,24 +24,26 @@ from utilities.ui import wg_status_notify, thread_handler
 
 class Home(Ui_Home, QWidget):
     info_bar_signal = Signal(str, str, str, object)
-    logout_signal = Signal()
 
     def __init__(self, vpn: VPN, scheduler: TaskScheduler, wireguard: WireGuard, parent=None):
         super().__init__(parent=parent)
         self._vpn = vpn
         self._scheduler = scheduler
         self._wireguard = wireguard
+        self._parent = parent
+        self._config = Config()
         self.connected = False
 
         self.setupUi(self)
         self.ChooseServerButton.setIcon(FluentIcon.UPDATE)
+        self.IncomingIcon.setIcon(FluentIcon.DOWN)
+        self.UpcomingIcon.setIcon(FluentIcon.UP)
+        self.progress_bar()
 
         self.info_bar_signal.connect(self.info_bar_handler)
         self.ChooseServerButton.clicked.connect(self.select_country)
         self.ConnectBtn.clicked.connect(self.connect_wg)
         self.ChangeIpBtn.clicked.connect(self.new_connection_wg)
-
-        self.update_country_and_ip()
 
     @Slot(str, str, str, object)
     def info_bar_handler(self, title, text, type, parent):
@@ -50,7 +54,16 @@ class Home(Ui_Home, QWidget):
                 createWarningInfoBar(title=title,
                                      content=text,
                                      parent=parent)
-                return True
+            case "error":
+                error_info_bar(title=title,
+                               content=text,
+                               parent=parent)
+
+    def progress_bar(self, switch: bool = False):
+        if not switch:
+            self.progressBar.setVisible(False)
+        else:
+            self.progressBar.setVisible(True)
 
     def new_connection_wg(self):
         self._scheduler.add_task(task_name="wg_update_config", task=self._new_connection_wg)
@@ -61,11 +74,9 @@ class Home(Ui_Home, QWidget):
     def update_country_and_ip(self):
         self._scheduler.add_task(task_name="ip_updater", task=self._update_country_and_ip)
 
-    def process_logout(self):
-        self._scheduler.remove_task("token_check")
-        self.logout_signal.emit()
-
-    def _connect_wg(self, stop_callback, config: str | None = None, recovery: bool | None = None):
+    def _connect_wg(self, stop_callback, config: str | None = None) -> bool:
+        self.ConnectBtn.setEnabled(False)
+        self.progress_bar(True)
         if self.connected:
             self._wireguard.disconnect()
             self.connected = False
@@ -77,60 +88,92 @@ class Home(Ui_Home, QWidget):
 
         wg_status_notify(connect_status=self.connected, parent=self)
         time.sleep(1)
-
-        internet_connection_status = self._update_country_and_ip(None)
-        if recovery:
-            self.process_logout()
-        elif not internet_connection_status and self.connected:
-            self._vpn.set_country_config("Auto")
-            if not self._new_connection_wg(None, recovery=True):
-                self.process_logout()
-        elif not internet_connection_status and not self.connected:
-            self.process_logout()
+        _status = self._update_country_and_ip(None)
+        self.ConnectBtn.setEnabled(True)
+        self.progress_bar()
+        return _status
 
     def _update_country_and_ip(self, stop_callback) -> bool:
         current_country = get_country_by_ip()
         current_ip_address = get_ip_address()
         if not current_ip_address["status"] or not current_country["status"]:
             self.info_bar_signal.emit("Error", current_ip_address["detail"],
-                                      "warning", self)
+                                      "warning", self._parent)
             return False
         self.CurrentIPText.setText(current_ip_address["data"])
         self.CurrentCountryText.setText(current_country["data"])
-        ico_path = f"resources/country_flags/{current_country["data"]}.ico"
-        if os.path.exists(ico_path):
+        ico_path = country_serializer("resources/country_flags", current_country["data"])
+
+        if ico_path is not None:
             self.CountryIcon.setIcon(ico_path)
         else:
             self.CountryIcon.setIcon(None)
         return True
 
-    def _new_connection_wg(self, stop_callback, recovery: bool | None = None):
+    def _new_connection_wg(self, stop_callback, server_quality: int = -1) -> bool:
+        __status = bool
+        counter = 0
+
+        self.ChangeIpBtn.setEnabled(False)
+        self.ChooseServerButton.setEnabled(False)
+        self.progress_bar(True)
         while True:
-            status = self._vpn.get_wg_config(country=self._vpn.get_country_config())
+            status = self._vpn.create_config_request(country=self._vpn.get_country_config(),
+                                                     server_quality=server_quality)
             if "data" not in status:
-                self.info_bar_signal.emit("Error", status["detail"], "warning", self)
-                return False
+                self.info_bar_signal.emit("Error", status["detail"], "warning", self._parent)
+                __status = False
+                break
             elif not status["status"]:
-                methods = [self._vpn.update_best_vpn_address, self._vpn.update_best_vpn_countries]
                 if status["data"]["code"] in range(2):
-                    _status = methods[status["data"]["code"]]()
-                    if not _status["status"]:
-                        self.info_bar_signal.emit("Error", f"Error getting config - {status["data"]["detail"]}",
-                                                  "warning", self)
-                        return False
+                    _status = update_servers(self._vpn, status["data"]["code"])
+                    if not _status:
+                        self.info_bar_signal.emit("Error", f"Error getting config - {status['data']['detail']}",
+                                                  "warning", self._parent)
+                        __status = False
+                        break
                     continue
                 else:
-                    self.info_bar_signal.emit("Error", f"Error getting config - {status["data"]["detail"]}",
-                                              "warning", self)
-                    return False
+                    self.info_bar_signal.emit("Error", f"Error getting config - {status['data']['detail']}",
+                                              "warning", self._parent)
+                    __status = False
+                    break
             else:
-                if self.connected:
-                    self._connect_wg(None)
-                self._connect_wg(None, config=status["data"]["config"], recovery=recovery)
-                return True
+                while True:
+                    if counter >= 45:
+                        self.info_bar_signal.emit("Warning", f"Riches timeout while waiting config",
+                                                  "warning", self._parent)
+                        __status = False
+                        break
+                    _status = self._vpn.get_config(request_id=status["data"]["request_id"])
+                    if _status["status"]:
+
+                        if self.connected:
+                            self._connect_wg(None)
+
+                        if self.isVisible():
+                            __status = self._connect_wg(None, config=_status["data"]["config"])
+                        else:
+                            __status = self._wireguard.update_config(config=_status["data"]["config"])["status"]
+                        break
+                    counter += 1
+                    time.sleep(2)
+                break
+
+        self.ChangeIpBtn.setEnabled(True)
+        self.ChooseServerButton.setEnabled(True)
+        self.progress_bar()
+        return __status
+
+    def _update_network_stats(self, stop_callback):
+        data = get_network_speed(interval=self._config.get(self._config.network_speed_interval))
+        if not data["status"]:
+            return False
+        self.IncomingText.setText(convert_bytes(data["bytes_recv"]))
+        self.UpcomingText.setText(convert_bytes(data["bytes_sent"]))
 
     def select_country(self):
-        w = SelectCountryMessageBox(vpn=self._vpn, parent=self)
+        w = SelectCountryMessageBox(vpn=self._vpn, parent=self._parent)
         if w.exec():
             selected_country = w.country_combo_box.currentText()
             self._vpn.set_country_config(selected_country)

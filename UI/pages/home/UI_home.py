@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'homeneyOdS.ui'
+## Form generated from reading UI file 'homefTGesU.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.2
 ##
@@ -15,20 +15,22 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLayout, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLayout,
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-from qfluentwidgets import (BodyLabel, CardWidget, IconWidget, PrimaryPushButton,
-    PushButton, ToolButton, TransparentToolButton)
+from qfluentwidgets import (BodyLabel, CardWidget, IconWidget, IndeterminateProgressBar,
+    PrimaryPushButton, PushButton, ToolButton, TransparentToolButton)
 
 class Ui_Home(object):
     def setupUi(self, Home):
         if not Home.objectName():
             Home.setObjectName(u"Home")
         Home.setWindowModality(Qt.WindowModality.NonModal)
-        Home.resize(418, 300)
-        self.horizontalLayout = QHBoxLayout(Home)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        Home.resize(917, 654)
+        self.gridLayout_2 = QGridLayout(Home)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
         self.ConnectionCard = CardWidget(Home)
         self.ConnectionCard.setObjectName(u"ConnectionCard")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -36,8 +38,8 @@ class Ui_Home(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ConnectionCard.sizePolicy().hasHeightForWidth())
         self.ConnectionCard.setSizePolicy(sizePolicy)
-        self.ConnectionCard.setMinimumSize(QSize(400, 250))
-        self.ConnectionCard.setMaximumSize(QSize(600, 600))
+        self.ConnectionCard.setMinimumSize(QSize(400, 350))
+        self.ConnectionCard.setMaximumSize(QSize(400, 350))
         font = QFont()
         font.setFamilies([u"Arial"])
         font.setPointSize(20)
@@ -155,6 +157,19 @@ class Ui_Home(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(5, -1, -1, -1)
+        self.progressBar = IndeterminateProgressBar(self.ConnectionCard)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setEnabled(True)
+        self.progressBar.setTextVisible(False)
+
+        self.horizontalLayout_4.addWidget(self.progressBar)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
+
 
         self.verticalLayout_3.addLayout(self.verticalLayout)
 
@@ -162,8 +177,78 @@ class Ui_Home(object):
 
         self.verticalLayout_3.addItem(self.TopVerticalSpacer)
 
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_5.setContentsMargins(5, -1, -1, -1)
+        self.IncomingIcon = IconWidget(self.ConnectionCard)
+        self.IncomingIcon.setObjectName(u"IncomingIcon")
+        self.IncomingIcon.setMinimumSize(QSize(18, 18))
+        self.IncomingIcon.setMaximumSize(QSize(20, 20))
+        self.IncomingIcon.setProperty("icon", icon)
 
-        self.horizontalLayout.addWidget(self.ConnectionCard)
+        self.horizontalLayout_5.addWidget(self.IncomingIcon)
+
+        self.IncomingText = BodyLabel(self.ConnectionCard)
+        self.IncomingText.setObjectName(u"IncomingText")
+        font3 = QFont()
+        font3.setFamilies([u"Arial"])
+        font3.setPointSize(18)
+        self.IncomingText.setFont(font3)
+        self.IncomingText.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.IncomingText.setWordWrap(True)
+        self.IncomingText.setMargin(0)
+        self.IncomingText.setProperty("lightColor", QColor(96, 96, 96))
+        self.IncomingText.setProperty("darkColor", QColor(206, 206, 206))
+
+        self.horizontalLayout_5.addWidget(self.IncomingText)
+
+        self.HorizontalSpacerSelectCOuntry_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.HorizontalSpacerSelectCOuntry_10)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.horizontalLayout_6.setContentsMargins(5, -1, -1, -1)
+        self.UpcomingIcon = IconWidget(self.ConnectionCard)
+        self.UpcomingIcon.setObjectName(u"UpcomingIcon")
+        self.UpcomingIcon.setMinimumSize(QSize(18, 18))
+        self.UpcomingIcon.setMaximumSize(QSize(20, 20))
+        self.UpcomingIcon.setProperty("icon", icon)
+
+        self.horizontalLayout_6.addWidget(self.UpcomingIcon)
+
+        self.UpcomingText = BodyLabel(self.ConnectionCard)
+        self.UpcomingText.setObjectName(u"UpcomingText")
+        self.UpcomingText.setFont(font3)
+        self.UpcomingText.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.UpcomingText.setWordWrap(True)
+        self.UpcomingText.setMargin(0)
+        self.UpcomingText.setProperty("lightColor", QColor(96, 96, 96))
+        self.UpcomingText.setProperty("darkColor", QColor(206, 206, 206))
+
+        self.horizontalLayout_6.addWidget(self.UpcomingText)
+
+        self.HorizontalSpacerSelectCOuntry_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_6.addItem(self.HorizontalSpacerSelectCOuntry_11)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+
+
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+
+
+        self.gridLayout.addWidget(self.ConnectionCard, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
 
 
         self.retranslateUi(Home)
@@ -173,9 +258,11 @@ class Ui_Home(object):
 
     def retranslateUi(self, Home):
         Home.setWindowTitle(QCoreApplication.translate("Home", u"Form", None))
-        self.CurrentCountryText.setText(QCoreApplication.translate("Home", u"", None))
-        self.CurrentIPText.setText(QCoreApplication.translate("Home", u"", None))
+        self.CurrentCountryText.setText("")
+        self.CurrentIPText.setText("")
         self.ConnectBtn.setText(QCoreApplication.translate("Home", u"Connect", None))
         self.ChangeIpBtn.setText(QCoreApplication.translate("Home", u"Change IP", None))
+        self.IncomingText.setText("")
+        self.UpcomingText.setText("")
     # retranslateUi
 

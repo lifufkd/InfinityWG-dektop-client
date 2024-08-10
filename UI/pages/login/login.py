@@ -7,10 +7,11 @@ from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme, SplitTitleBar, isDarkTheme, FluentIcon
 from UI.pages.login.UI_login import Ui_Login
-from utilities.ui import (isWin11, select_window, createWarningInfoBar,
-                          createSuccessInfoBar, SettingMessageBox)
+from modules.ui import (isWin11, select_window, createWarningInfoBar,
+                        createSuccessInfoBar, SettingMessageBox)
 from resources.vars import APP_NAME
 from API.Requests import Authorization
+from modules.config import Config
 ##########################
 
 ##########################
@@ -25,7 +26,10 @@ class LoginWindow(Window, Ui_Login):
 
     def __init__(self, authorization: Authorization):
         super().__init__()
-        # TODO: Add setting menu to login and reg page with host url line edit
+
+        self.original_pixmap = None
+        self._config = Config()
+
         self.setupUi(self)
         setTheme(Theme.AUTO)
 
@@ -34,9 +38,17 @@ class LoginWindow(Window, Ui_Login):
         self.titleBar.raise_()
         self.LoginImage.setScaledContents(False)
         self.setWindowTitle(APP_NAME)
-        self.setWindowIcon(QIcon("resources/images/logo.svg"))
-        self.resize(1280, 720)
 
+        self.LoginpushButton.clicked.connect(self.login)
+        self.RegistrationpushButton.clicked.connect(self.open_reg)
+        self.SettingsPushButton.clicked.connect(self.open_settings)
+        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
+
+        self.initWindow()
+
+    def initWindow(self):
+        self.resize(self._config.get(self._config.login_width), self._config.get(self._config.login_height))
+        self.setWindowIcon(QIcon("resources/images/logo.svg"))
         self.windowEffect.setMicaEffect(self.winId(), isDarkMode=isDarkTheme())
         if not isWin11():
             color = QColor(25, 33, 42) if isDarkTheme() else QColor(240, 244, 249)
@@ -44,11 +56,8 @@ class LoginWindow(Window, Ui_Login):
 
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
-        self.move(w//2 - self.width()//2, h//2 - self.height()//2)
-        self.LoginpushButton.clicked.connect(self.login)
-        self.RegistrationpushButton.clicked.connect(self.open_reg)
-        self.SettingsPushButton.clicked.connect(self.open_settings)
-        self.SettingsPushButton.setIcon(FluentIcon.SETTING)
+        self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
+        self.original_pixmap = QPixmap("resources/images/login_background.jpg")
 
     def login(self):
         login = self.LoginlineEdit.text()
@@ -100,7 +109,9 @@ class LoginWindow(Window, Ui_Login):
             self._authorization.change_host_url(w.urlLineEdit.text())
 
     def resizeEvent(self, e):
+        self._config.set(self._config.login_width, e.size().width())
+        self._config.set(self._config.login_height, e.size().height())
         super().resizeEvent(e)
-        pixmap = QPixmap("resources/images/login_background.jpg").scaled(
+        pixmap = self.original_pixmap.scaled(
             self.LoginImage.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
         self.LoginImage.setPixmap(pixmap)
