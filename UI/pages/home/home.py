@@ -140,7 +140,7 @@ class Home(Ui_Home, QWidget):
                     break
             else:
                 while True:
-                    if counter >= 45:
+                    if counter >= self._config.get(self._config.get_config_timeout):
                         self.info_bar_signal.emit("Warning", f"Riches timeout while waiting config",
                                                   "warning", self._parent)
                         __status = False

@@ -31,6 +31,10 @@ class Config(QConfig):
         "System", "host", "http://localhost:8000"
     )
 
+    get_config_timeout = ConfigItem(
+        "System", "get_config_timeout", 120
+    )
+
     internet_check = ConfigItem(
         "System", "check_internet_domain", [
             ["8.8.8.8", "www.google.com"],
