@@ -1,5 +1,5 @@
-![{8DED573C-2D96-40E5-95A6-3B4883C81B76}](https://github.com/user-attachments/assets/eb99b8ff-cef0-4689-9291-ea7cb5fbb133) 
 ![{3A3AC56C-1C7A-480A-AF9A-6B4CF0A34C87}](https://github.com/user-attachments/assets/15126378-d6a4-4756-a4b1-d43d073cc26a)
+![{8DED573C-2D96-40E5-95A6-3B4883C81B76}](https://github.com/user-attachments/assets/eb99b8ff-cef0-4689-9291-ea7cb5fbb133) 
 # InfinityWG Desktop Client
 
 ## [EN]
